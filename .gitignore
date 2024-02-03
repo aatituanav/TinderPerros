@@ -3,9 +3,11 @@
 # dependencies
 node_modules/
 
-#env
+
+
+#virtual env
 server/.env/
-server/model
+
 
 
 # Expo
