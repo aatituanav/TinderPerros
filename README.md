@@ -1,5 +1,4 @@
 # TinderPerros
-## _Esta es una copia de tinder pero con perros xd_
 
 
 ## VERSION DE NODE: v20.11.0

@@ -3,6 +3,13 @@
 # dependencies
 node_modules/
 
+
+
+#virtual env
+server/.env/
+
+
+
 # Expo
 .expo/
 dist/
