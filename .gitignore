@@ -7,7 +7,8 @@ node_modules/
 
 #virtual env
 server/.env/
-
+server/__pycache__/*
+.env
 
 
 # Expo

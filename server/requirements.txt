@@ -7,3 +7,4 @@ flask==3.0.1
 tensorflow
 transformers==4.37.2
 pillow==10.2.0
+flask-cors==4.0.0

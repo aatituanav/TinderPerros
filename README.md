@@ -18,3 +18,13 @@ Todo esta almacenado en src de la siguiente manera
 |-- config.js # Configuración de la aplicación 
 |-- /api # Carpeta para manejar todas las solicitudes HTTP a la API 
 |-- /routes # Definición de rutas de la API
+
+
+Server
+
+Activar el entorno virtual
+Set-ExecutionPolicy RemoteSigned -Scope Process
+.\.env\Scripts\activate  
+
+Desplegar 
+gcloud run deploy
