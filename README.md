@@ -28,3 +28,9 @@ Set-ExecutionPolicy RemoteSigned -Scope Process
 
 Desplegar 
 gcloud run deploy
+
+
+
+Entorno virtual 
+Set-ExecutionPolicy RemoteSigned -Scope Process
+.\.env\Scripts\activate

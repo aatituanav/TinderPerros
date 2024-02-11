@@ -5,18 +5,14 @@ import { uploadToFirebase } from "../api/crudImages";
 import { getBreed } from "../api/predictbreed";
 import AwesomeIcon from "react-native-vector-icons/FontAwesome";
 
-const Match = () => {
+const Login = () => {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Texto Chido</Text>
-      <AwesomeIcon
-        name="rocket"
-        size={40}
-        color="#000"
-        style={{ marginRight: 5 }}
+      <Image
+        source={require("../assets/petmachlogo.png")}
       />
     </View>
   );
 };
 
-export default Match;
+export default Login;

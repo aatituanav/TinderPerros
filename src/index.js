@@ -3,7 +3,9 @@ import DogForm from "./views/dogform";
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 import AwesomeIcon from "react-native-vector-icons/FontAwesome";
-import Match from "./views/match";
+import MatchView from "./views/matchview";
+import UserForm from "./views/userform";
+import Login from "./views/login";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -11,6 +13,9 @@ export default function Index() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
+        <Tab.Screen name="Login" component={Login}/>
+        <Tab.Screen name="UserForm" component={UserForm} />
+
         <Tab.Screen
           name="Home"
           component={DogForm}
@@ -26,7 +31,7 @@ export default function Index() {
             ),
           }}
         />
-        <Tab.Screen name="Upload" component={Match} />
+        <Tab.Screen name="Upload" component={MatchView} />
       </Tab.Navigator>
     </NavigationContainer>
   );

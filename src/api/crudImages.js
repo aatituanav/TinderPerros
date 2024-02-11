@@ -11,7 +11,7 @@ const uploadToFirebase = async (imageUri, name, onProgress) => {
     const fetchResponse = await fetch(imageUri);
     const theBlob = await fetchResponse.blob();
 
-    const imageRef = ref(getStorage(), `dogsImages/${name}`);
+    const imageRef = ref(getStorage(), name);
 
     const uploadTask = uploadBytesResumable(imageRef, theBlob);
 

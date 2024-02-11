@@ -4,22 +4,32 @@ import * as ImagePicker from "expo-image-picker";
 import { uploadToFirebase } from "../api/crudImages";
 import { getBreed } from "../api/predictbreed";
 import { TextInput, Text, Button, ActivityIndicator } from "react-native-paper";
+import DropDown from "react-native-paper-dropdown";
 
-const DogForm = () => {
+const UserForm = () => {
   const [image, setImage] = useState(null);
   const [name, setName] = useState("");
-  const [birthdate, setBirthdate] = useState("");
+  const [idnumber, setIdNumber] = useState("");
   const [urlImage, setUrlImage] = useState("");
-  const [breed, setBreed] = useState("");
-  const [uploading, setUploading] = useState(false);
-  const [description, setDescription] = useState("");
   const [canUpload, setCanUpload] = useState(false);
+  const [gender, setGender] = useState("");
+  const [showDropDown, setShowDropDown] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const genderList = [
+    {
+      label: "Masculino",
+      value: "Masculino",
+    },
+    {
+      label: "Femenino",
+      value: "Femenino",
+    },
+  ];
 
   const resetData = () => {
     setImage(null);
     setUrlImage("");
-    setBreed("");
-    setUploading(false);
   };
   const pickImage = async () => {
     try {
@@ -33,11 +43,9 @@ const DogForm = () => {
         const imageUri = result.assets[0].uri;
         setImage(imageUri);
         setUploading(true);
-        const downloadUrl = await uploadToFirebase(imageUri, `dogsImages/name`);
-        setUrlImage(downloadUrl);
-        const breed = await getBreed(downloadUrl);
-        setBreed(breed);
+        const downloadUrl = await uploadToFirebase(imageUri, `userImages/name`);
         setUploading(false);
+        setUrlImage(downloadUrl);
         setCanUpload(true);
       }
     } catch (error) {
@@ -51,7 +59,7 @@ const DogForm = () => {
         mode="contained"
         onPress={() => {
           resetData();
-          setCanUpload(false)
+          setCanUpload(false);
           pickImage();
         }}
       >
@@ -62,32 +70,29 @@ const DogForm = () => {
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
         </>
       )}
-      {image && !uploading && (
-        <>
-          <Text variant="titleLarge">Raza Detectada</Text>
-          <Text variant="titleLarge">{global.breeds[breed]}</Text>
-        </>
-      )}
       {uploading && (
         <View>
-          <Text variant="titleLarge">Analizando Imagen</Text>
+          <Text variant="titleLarge">Cargando</Text>
           <ActivityIndicator size="large" animating={true} />
         </View>
       )}
-      <TextInput label="Nombre" value={name} onChangeText={setName} />
+
+      <TextInput label="Nombres" value={name} onChangeText={setName} />
       <TextInput
-        label="Año de nacimiento"
-        value={birthdate}
-        onChangeText={setBirthdate}
-        keyboardType="numeric"
-      />
-      <TextInput
-        multiline
-        placeholder="Cuentanos sobre tu mascota"
-        value={description}
-        onChangeText={setDescription}
+        label="Documento de Identidad"
+        value={idnumber}
+        onChangeText={setIdNumber}
       />
 
+      <DropDown
+        label={"Genero"}
+        visible={showDropDown}
+        showDropDown={() => setShowDropDown(true)}
+        onDismiss={() => setShowDropDown(false)}
+        value={gender}
+        setValue={setGender}
+        list={genderList}
+      />
       <Button
         icon="home"
         mode="contained"
@@ -102,4 +107,4 @@ const DogForm = () => {
   );
 };
 
-export default DogForm;
+export default UserForm;
