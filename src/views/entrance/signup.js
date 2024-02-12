@@ -4,6 +4,7 @@ import { Image, View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { auth } from "../../../firebase";
 import styles from "../../styles/styles";
+import { useNavigation } from "@react-navigation/native";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -13,10 +14,9 @@ const Signup = () => {
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
+  const navigation = useNavigation();
 
   const handleCreateAccount = async () => {
-    console.log(user, pass);
-
     if (pass != confirmPass) {
       Alert.alert("Las contraseñas no coinciden");
       return;

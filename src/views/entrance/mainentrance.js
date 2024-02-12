@@ -20,7 +20,6 @@ const MainEntrance = () => {
     const fetchuser = async () => {
       try {
         global.user = await AsyncStorage.getItem("user");
-        console.log(global.user);
         if (global.user != null) {
           navigation.navigate("Principal");
         }

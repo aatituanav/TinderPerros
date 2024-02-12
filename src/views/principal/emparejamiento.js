@@ -14,21 +14,21 @@ const Emparejamiento = () => {
         name: "Luna",
         species: "Dog",
         breed: "Labrador Retriever",
-        image: require("../assets/petmachlogo.png"),
+        image: require("../../assets/petmachlogo.png"),
       },
       {
         id: 2,
         name: "Max",
         species: "Dog",
         breed: "Golden Retriever",
-        image: require("../assets/petmachlogo.png"),
+        image: require("../../assets/petmachlogo.png"),
       },
       {
         id: 3,
         name: "Simba",
         species: "Cat",
         breed: "Persian",
-        image: require("../assets/petmachlogo.png"),
+        image: require("../../assets/petmachlogo.png"),
       },
       // Agrega más mascotas según sea necesario
     ];
