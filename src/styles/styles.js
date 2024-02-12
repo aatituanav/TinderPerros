@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export default styles = StyleSheet.create({
+const styles = StyleSheet.create({
   buttons: {
     width: "80%",
     margin: 3,
@@ -15,3 +15,5 @@ export default styles = StyleSheet.create({
     height: 50,
   },
 });
+
+export default styles;
