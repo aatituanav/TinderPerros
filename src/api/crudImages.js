@@ -1,4 +1,3 @@
-import aplicacion from "../../firebase";
 import {
   getStorage,
   ref,

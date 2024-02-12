@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Image, View } from "react-native";
+import { Image, View, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { uploadToFirebase } from "../api/crudImages";
-import { getBreed } from "../api/predictbreed";
+import { uploadToFirebase } from "../../api/crudImages";
+import { getBreed } from "../../api/predictbreed";
 import { TextInput, Text, Button, ActivityIndicator } from "react-native-paper";
 
 const DogForm = () => {
@@ -47,11 +47,12 @@ const DogForm = () => {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Button
+        style={styles.buttons}
         icon="home"
         mode="contained"
         onPress={() => {
           resetData();
-          setCanUpload(false)
+          setCanUpload(false);
           pickImage();
         }}
       >
@@ -74,14 +75,21 @@ const DogForm = () => {
           <ActivityIndicator size="large" animating={true} />
         </View>
       )}
-      <TextInput label="Nombre" value={name} onChangeText={setName} />
       <TextInput
+        style={styles.buttons}
+        label="Nombre"
+        value={name}
+        onChangeText={setName}
+      />
+      <TextInput
+        style={styles.buttons}
         label="Año de nacimiento"
         value={birthdate}
         onChangeText={setBirthdate}
         keyboardType="numeric"
       />
       <TextInput
+        style={styles.buttons}
         multiline
         placeholder="Cuentanos sobre tu mascota"
         value={description}
@@ -89,6 +97,7 @@ const DogForm = () => {
       />
 
       <Button
+        style={styles.buttons}
         icon="home"
         mode="contained"
         disabled={!canUpload}
@@ -101,5 +110,11 @@ const DogForm = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  buttons: {
+    width: "80%",
+  },
+});
 
 export default DogForm;

@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import aplicacion from '../firebase'
 import { getDatabase, ref, set } from "firebase/database";
 
@@ -19,7 +19,6 @@ export default function UploadFile() {
 
   return (
     <View style={styles.container}>
-      <Button title='Subir texto' onPress={writeUserData} />
     </View>
   );
 }

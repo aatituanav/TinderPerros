@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Image, View } from "react-native";
+import { Image, View, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { uploadToFirebase } from "../api/crudImages";
-import { getBreed } from "../api/predictbreed";
+import { uploadToFirebase } from "../../api/crudImages";
+import { getBreed } from "../../api/predictbreed";
 import { TextInput, Text, Button, ActivityIndicator } from "react-native-paper";
 import DropDown from "react-native-paper-dropdown";
 
@@ -55,6 +55,7 @@ const UserForm = () => {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Button
+        style={styles.buttons}
         icon="home"
         mode="contained"
         onPress={() => {
@@ -77,14 +78,21 @@ const UserForm = () => {
         </View>
       )}
 
-      <TextInput label="Nombres" value={name} onChangeText={setName} />
       <TextInput
+        style={styles.buttons}
+        label="Nombres"
+        value={name}
+        onChangeText={setName}
+      />
+      <TextInput
+        style={styles.buttons}
         label="Documento de Identidad"
         value={idnumber}
         onChangeText={setIdNumber}
       />
 
       <DropDown
+        style={styles.buttons}
         label={"Genero"}
         visible={showDropDown}
         showDropDown={() => setShowDropDown(true)}
@@ -94,6 +102,7 @@ const UserForm = () => {
         list={genderList}
       />
       <Button
+        style={styles.buttons}
         icon="home"
         mode="contained"
         disabled={!canUpload}
@@ -106,5 +115,11 @@ const UserForm = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  buttons: {
+    width: "80%",
+  },
+});
 
 export default UserForm;
