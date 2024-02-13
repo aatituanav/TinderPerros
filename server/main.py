@@ -44,7 +44,7 @@ def predict():
     top_k_values, top_k_indices = tf.math.top_k(logits, k)
     
     #aplico softmax para que me de una puntucaion que sume 100
-    puntuaciones = (tf.nn.softmax(top_k_values)*100).numpy()
+    puntuaciones = (tf.nn.softmax(top_k_values)).numpy()
     np.set_printoptions(suppress=True)
 
     

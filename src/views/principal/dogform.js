@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { BreedSelector, WriteBreed } from "./components/dogcomponents";
 import { Image, View, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { uploadToFirebase } from "../../api/crudImages";
 import { getBreed } from "../../api/predictbreed";
+import styles from "../../styles/styles";
+
 import { TextInput, Text, Button, ActivityIndicator } from "react-native-paper";
 
 const DogForm = () => {
@@ -10,15 +13,26 @@ const DogForm = () => {
   const [name, setName] = useState("");
   const [birthdate, setBirthdate] = useState("");
   const [urlImage, setUrlImage] = useState("");
-  const [breed, setBreed] = useState("");
+  const [breedName, setBreedName] = useState("");
+  const [breedId, setBreedId] = useState("");
   const [uploading, setUploading] = useState(false);
   const [description, setDescription] = useState("");
   const [canUpload, setCanUpload] = useState(false);
+  const [breedsList, setBreedsList] = useState([]);
+  const [punctuationList, setPunctuationList] = useState([]);
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [dialogWriteVisible, setDialogWriteVisible] = useState(false);
+
+  //oculta el dialogo para seleccionar las razas detectadas
+  const hideDialog = () => setDialogVisible(false);
+  const hideWriteDialog = () => setDialogWriteVisible(false);
+  const showWriteDialog = () => setDialogWriteVisible(true);
 
   const resetData = () => {
     setImage(null);
     setUrlImage("");
-    setBreed("");
+    setBreedId("");
+    setBreedName("");
     setUploading(false);
   };
   const pickImage = async () => {
@@ -33,10 +47,13 @@ const DogForm = () => {
         const imageUri = result.assets[0].uri;
         setImage(imageUri);
         setUploading(true);
-        const downloadUrl = await uploadToFirebase(imageUri, `dogsImages/name`);
+        const downloadUrl =
+          "https://assets-global.website-files.com/63634f4a7b868a399577cf37/642d66f958bac5831704029f_maltipoo.jpg"; //await uploadToFirebase(imageUri, `dogsImages/name`);
         setUrlImage(downloadUrl);
-        const breed = await getBreed(downloadUrl);
-        setBreed(breed);
+        const breeds = await getBreed(downloadUrl);
+        setBreedsList(breeds.breed);
+        setPunctuationList(breeds.score);
+        setDialogVisible(true);
         setUploading(false);
         setCanUpload(true);
       }
@@ -44,6 +61,31 @@ const DogForm = () => {
       console.error(error);
     }
   };
+
+  const WriteBreedMemo = useMemo(() => {
+    return () =>
+      WriteBreed(
+        dialogWriteVisible,
+        breedName,
+        hideDialog,
+        hideWriteDialog,
+        setBreedName
+      );
+  }, [breedName, dialogWriteVisible]);
+
+  const BreedSelectorMemo = useMemo(() => {
+    return () =>
+      BreedSelector(
+        dialogVisible,
+        breedsList,
+        punctuationList,
+        hideDialog,
+        showWriteDialog,
+        setBreedId,
+        setBreedName
+      );
+  }, [dialogVisible, breedsList, punctuationList]);
+
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Button
@@ -65,8 +107,10 @@ const DogForm = () => {
       )}
       {image && !uploading && (
         <>
-          <Text variant="titleLarge">Raza Detectada</Text>
-          <Text variant="titleLarge">{global.breeds[breed]}</Text>
+          <Text variant="titleLarge">Raza: </Text>
+          <Text variant="titleLarge">
+            {breedId == "" ? breedName : global.breeds[breedId]}
+          </Text>
         </>
       )}
       {uploading && (
@@ -102,19 +146,16 @@ const DogForm = () => {
         mode="contained"
         disabled={!canUpload}
         onPress={() => {
-          setCanUpload(false);
+          //setCanUpload(false);
+          console.log(breedId, breedName);
         }}
       >
         Continuar
       </Button>
+      {BreedSelectorMemo()}
+      {WriteBreedMemo()}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  buttons: {
-    width: "80%",
-  },
-});
 
 export default DogForm;

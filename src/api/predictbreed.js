@@ -25,8 +25,7 @@ export async function getBreed(imageUrl) {
     const responseData = await response.json();
     // Verifica si la respuesta tiene la propiedad 'breed'
     if (responseData.breed != null) {
-      const breed = responseData.breed;
-      return breed;
+      return responseData;
     } else {
       throw new Error(
         "La respuesta del servidor no contiene la propiedad 'breed'."

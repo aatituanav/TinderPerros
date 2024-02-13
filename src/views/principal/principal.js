@@ -16,12 +16,12 @@ export default function Principal() {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Emparejamiento"
-        component={Emparejamiento}
+        name="Perros Publicados"
+        component={DogsPublished}
         options={{
-          tabBarLabel: "Adoptar un Amigo",
+          tabBarLabel: "Mascotas Publicadas",
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
+            <FontAwesome6
               name="dog"
               size={30}
               color="#000"
@@ -31,12 +31,12 @@ export default function Principal() {
         }}
       />
       <Tab.Screen
-        name="Perros Publicados"
-        component={DogsPublished}
+        name="Emparejamiento"
+        component={Emparejamiento}
         options={{
-          tabBarLabel: "Mascotas Publicadas",
+          tabBarLabel: "Adoptar un Amigo",
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome6
+            <MaterialCommunityIcons
               name="dog"
               size={30}
               color="#000"

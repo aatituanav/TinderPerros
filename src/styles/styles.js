@@ -14,6 +14,13 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
   },
+  breedDialogListContainer: {
+    flexDirection: "column",
+  },
+  breedDialogListButton: {
+    width: "100%",
+    marginVertical: 5,
+  },
 });
 
 export default styles;
