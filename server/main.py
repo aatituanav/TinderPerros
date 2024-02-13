@@ -3,6 +3,7 @@ import tensorflow as tf
 import requests
 from flask import Flask, request, jsonify
 from PIL import Image
+import numpy as np
 from flask_cors import CORS
 
 import os
@@ -35,10 +36,24 @@ def predict():
     
     inputs = app.image_processor(image, return_tensors="tf")
     logits = app.model(**inputs).logits
-    predicted_label = int(tf.math.argmax(logits, axis=-1))
-    #breed = app.model.config.id2label[predicted_label]
-    response_data = {'breed': predicted_label}
-    print(response_data)
+
+    # Especifica cuántos elementos principales deseas obtener
+    k = logits.shape[-1]  # obtener todos los elementos
+
+    # Obtener los k mejores índices y puntuaciones
+    top_k_values, top_k_indices = tf.math.top_k(logits, k)
+    
+    #aplico softmax para que me de una puntucaion que sume 100
+    puntuaciones = (tf.nn.softmax(top_k_values)*100).numpy()
+    np.set_printoptions(suppress=True)
+
+    
+    firstfourpunctuation = np.take(puntuaciones, range(4))
+    firstfourindex =  np.take(top_k_indices.numpy(), range(4))
+
+    response_data = {'breed': firstfourindex.tolist(),
+                     'score': firstfourpunctuation.tolist()
+                    }
     response = jsonify(response_data)
     return response
 
