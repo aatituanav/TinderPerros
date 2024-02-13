@@ -19,7 +19,8 @@ const MainEntrance = () => {
   useEffect(() => {
     const fetchuser = async () => {
       try {
-        global.user = await AsyncStorage.getItem("user");
+        crudData = await AsyncStorage.getItem("user");
+        global.user = JSON.parse(crudData);
         if (global.user != null) {
           navigation.navigate("Principal");
         }

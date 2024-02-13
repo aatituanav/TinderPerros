@@ -16,6 +16,21 @@ export default function Principal() {
   return (
     <Tab.Navigator>
       <Tab.Screen
+        name="Home"
+        component={DogForm}
+        options={{
+          tabBarLabel: "Dar en Adopción",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons
+              name="pets"
+              size={30}
+              color="#000"
+              style={{ marginRight: 0 }}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="Perros Publicados"
         component={DogsPublished}
         options={{
@@ -46,21 +61,6 @@ export default function Principal() {
         }}
       />
 
-      <Tab.Screen
-        name="Home"
-        component={DogForm}
-        options={{
-          tabBarLabel: "Dar en Adopción",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons
-              name="pets"
-              size={30}
-              color="#000"
-              style={{ marginRight: 0 }}
-            />
-          ),
-        }}
-      />
       <Tab.Screen
         name="Options"
         component={UserOptions}

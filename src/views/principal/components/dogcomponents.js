@@ -21,7 +21,6 @@ const WriteBreed = (
 ) => {
   return (
     <Portal>
-      {console.log("se renderiza WriteBreed")}
       <Dialog visible={dialogWriteVisible} onDismiss={hideWriteDialog}>
         <Dialog.Title>
           Razas Detectadas <Dialog.Icon icon="dog" />
@@ -61,7 +60,6 @@ const BreedSelector = (
 ) => {
   return (
     <Portal>
-      {console.log("se renderiza BreedSelector")}
       <Dialog visible={dialogVisible} onDismiss={hideDialog}>
         <Dialog.Title>
           Razas Detectadas <Dialog.Icon icon="dog" />
