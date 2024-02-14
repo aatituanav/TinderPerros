@@ -5,13 +5,15 @@ import { Button } from "react-native-paper";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import styles from "../../styles/styles";
+import { auth } from "../../../firebase";
 
 const UserOptions = ({ navigation }) => {
   const handleLogOut = async () => {
     try {
-      const auth = getAuth();
-      await AsyncStorage.removeItem("user");
-      global.user = null;
+      await AsyncStorage.removeItem("userAuth");
+      await AsyncStorage.removeItem("userData");
+      global.userData = null;
+      global.userAuth = null;
       await signOut(auth);
       navigation.navigate("AuthForm");
     } catch (error) {

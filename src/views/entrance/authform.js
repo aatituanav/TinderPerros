@@ -8,6 +8,8 @@ import styles from "../../styles/styles";
 
 import { useNavigation } from "@react-navigation/native";
 import { getUser } from "../../api/crudusers";
+import { auth } from "../../../firebase";
+import { signOut } from "firebase/auth";
 
 const MAIN = 0;
 const LOGIN = 1;
@@ -20,15 +22,19 @@ const AuthForm = () => {
   useEffect(() => {
     const fetchuser = async () => {
       try {
-        crudData = await AsyncStorage.getItem("user");
-        global.user = JSON.parse(crudData);
+        userAuth = await AsyncStorage.getItem("userAuth");
+        global.userAuth = JSON.parse(userAuth);
 
-        if (global.user != null) {
-          const userData = await getUser(global.user.uid);
+        if (global.userAuth != null) {
+          const userData = await getUser(global.userAuth.uid);
           console.log(userData);
           if (userData == null) {
-            navigation.navigate("UserFormRegister");
+            await AsyncStorage.removeItem("userAuth");
+            global.userAuth = null;
+            await signOut(auth);
           } else {
+            await AsyncStorage.setItem("userData", JSON.stringify(userData));
+            global.userData = userData;
             navigation.navigate("Principal");
           }
         }

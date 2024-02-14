@@ -14,15 +14,22 @@ const Login = () => {
   const [seePass, setSeePass] = useState(true);
   const navigation = useNavigation();
 
+  const resetData = () => {
+    setUser("");
+    setPass("");
+    setSeePass("");
+  };
+
   const handleLogin = async () => {
     try {
       const response = await signInWithEmailAndPassword(auth, user, pass);
 
-      const userJson = response.user.toJSON();
-      await AsyncStorage.setItem("user", JSON.stringify(userJson));
-      global.user = userJson;
+      const userJsonAuth = response.user.toJSON();
+      await AsyncStorage.setItem("userAuth", JSON.stringify(userJsonAuth));
+      global.userAuth = userJsonAuth;
 
-      const userData = await getUser(global.user.uid);
+      const userData = await getUser(global.userAuth.uid);
+      resetData();
       if (userData == null) {
         navigation.navigate("UserFormRegister");
       } else {

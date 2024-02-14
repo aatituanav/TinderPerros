@@ -31,9 +31,9 @@ const Signup = () => {
     try {
       setCreatingUser(true);
       const response = await createUserWithEmailAndPassword(auth, user, pass);
-      const userJson = response.user.toJSON();
-      await AsyncStorage.setItem("user", JSON.stringify(userJson));
-      global.user = userJson;
+      const userJsonAuth = response.user.toJSON();
+      await AsyncStorage.setItem("userAuth", JSON.stringify(userJsonAuth));
+      global.userAuth = userJsonAuth;
       clearData();
       navigation.navigate("UserFormRegister");
     } catch (error) {

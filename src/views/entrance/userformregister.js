@@ -4,9 +4,8 @@ import * as ImagePicker from "expo-image-picker";
 import { uploadToFirebase } from "../../api/crudImages";
 import { getBreed } from "../../api/predictbreed";
 import { TextInput, Text, Button, ActivityIndicator } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import DropDown from "react-native-paper-dropdown";
-import { push, ref } from "firebase/database";
-import { database } from "../../../firebase";
 import styles from "../../styles/styles";
 import { putUser } from "../../api/crudusers";
 
@@ -41,7 +40,7 @@ const UserFormRegister = ({ navigation }) => {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
-        quality: 0.5,
+        quality: 0.2,
       });
       if (!result.canceled) {
         const imageUri = result.assets[0].uri;
@@ -58,11 +57,21 @@ const UserFormRegister = ({ navigation }) => {
       try {
         const downloadUrl = await uploadToFirebase(
           image,
-          `userImages/` + global.user.uid
+          `userImages/` + global.userAuth.uid
         );
-        putUser(global.user.uid, name, gender, downloadUrl, idnumber);
-        resetData();
+        putUser(global.userAuth.uid, name, gender, downloadUrl, idnumber);
+        
+
+        global.userData = {
+          uid: global.userAuth.uid,
+          name: name,
+          gender: gender,
+          urlImage: downloadUrl,
+          idnumber: idnumber,
+        };
+        await AsyncStorage.setItem("userData", JSON.stringify(global.userData));
         setUploadingForm(false);
+        resetData();
         navigation.navigate("Principal"); // Navega a la otra pestaña
       } catch (error) {
         Alert.alert(error.message);
