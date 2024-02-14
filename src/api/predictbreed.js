@@ -1,7 +1,7 @@
 import { APIDOGBREED } from "@env";
 
 export async function getBreed(imageUrl) {
-  const url = "https://tinderperros-xz2a5u3iua-tl.a.run.app/api/predictbreed";
+  const url = APIDOGBREED;
   const localUrl = "http://10.0.0.19:8080/api/predictbreed";
   const data = {
     image_url: imageUrl,

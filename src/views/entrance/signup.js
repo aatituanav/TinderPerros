@@ -14,20 +14,31 @@ const Signup = () => {
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
+  const [creatingUser, setCreatingUser] = useState(false);
   const navigation = useNavigation();
 
+  const clearData = () => {
+    setUser("");
+    setPass("");
+    setConfirmPass("");
+    setCreatingUser(false);
+  };
   const handleCreateAccount = async () => {
     if (pass != confirmPass) {
       Alert.alert("Las contraseñas no coinciden");
       return;
     }
     try {
+      setCreatingUser(true);
       const response = await createUserWithEmailAndPassword(auth, user, pass);
       const userJson = response.user.toJSON();
       await AsyncStorage.setItem("user", JSON.stringify(userJson));
-      navigation.navigate("Principal");
+      global.user = userJson;
+      clearData();
+      navigation.navigate("UserFormRegister");
     } catch (error) {
       Alert.alert(error.message);
+      setCreatingUser(false);
     }
   };
 
@@ -57,6 +68,7 @@ const Signup = () => {
       <Button
         style={styles.buttons}
         icon="login"
+        loading={creatingUser}
         mode="contained"
         onPress={handleCreateAccount}
       >

@@ -9,14 +9,15 @@ import { push, ref } from "firebase/database";
 import { database } from "../../../firebase";
 import { TextInput, Text, Button, ActivityIndicator } from "react-native-paper";
 
-const DogForm = () => {
+const DogForm = ({ navigation }) => {
   const [image, setImage] = useState(null);
-  const [name, setName] = useState("Pipo");
-  const [birthdate, setBirthdate] = useState("1996");
+  const [name, setName] = useState("");
+  const [birthdate, setBirthdate] = useState("");
   const [urlImage, setUrlImage] = useState("");
   const [breedName, setBreedName] = useState("");
   const [breedId, setBreedId] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [uploadingForm, setUploadingForm] = useState(false);
   const [description, setDescription] = useState("");
   const [canUpload, setCanUpload] = useState(false);
   const [breedsList, setBreedsList] = useState([]);
@@ -31,6 +32,7 @@ const DogForm = () => {
   const showWriteDialog = () => setDialogWriteVisible(true);
 
   const resetData = () => {
+    console.log("se reseteans los datos");
     setImage(null);
     setUrlImage("");
     setBreedId("");
@@ -44,7 +46,7 @@ const DogForm = () => {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
-        quality: 1,
+        quality: 0.5,
       });
       if (!result.canceled) {
         const imageUri = result.assets[0].uri;
@@ -52,13 +54,11 @@ const DogForm = () => {
         setUploading(true);
         let nameTemp = null;
         if (nameImageFirestore == "") {
+          console.log(global.user);
           console.log("se crea un nombre para la imagen");
           nameTemp = global.user.uid + `_` + new Date();
           setNameImageFirestore(nameTemp);
         }
-        console.log("contenido del estado: " + nameImageFirestore);
-        console.log("contenido de la variable Temporal: " + nameTemp);
-        console.log(nameImageFirestore == "");
         //la comparacion es por que no puedo acceder al estado directamente en el mismo metodo cuando lo cambio
         const downloadUrl = await uploadToFirebase(
           imageUri,
@@ -69,7 +69,17 @@ const DogForm = () => {
         const breeds = await getBreed(downloadUrl);
         setBreedsList(breeds.breed);
         setPunctuationList(breeds.score);
-        setDialogVisible(true);
+        //calculo la suma de las puntuaciones para ver si se detecto una mascota o no
+        const suma = breeds.score.reduce(
+          (acumulador, valorActual) => acumulador + valorActual,
+          0
+        );
+
+        if (suma < 0.1) {
+          Alert.alert("No se detectó ningún perro");
+        } else {
+          setDialogVisible(true);
+        }
         setUploading(false);
         setCanUpload(true);
       }
@@ -104,6 +114,7 @@ const DogForm = () => {
 
   const handlePetUpload = () => {
     const writeData = async () => {
+      setUploadingForm(true);
       try {
         await push(ref(database, "dogsData"), {
           user: global.user.uid,
@@ -114,10 +125,18 @@ const DogForm = () => {
           breedName: breedName,
           breedId: breedId,
         });
+        resetData();
+        setCanUpload(false);
+        setDescription("");
+        setBirthdate("");
+        setName("");
+        setUploadingForm(false);
+        navigation.navigate("DogsPublished"); // Navega a la otra pestaña
       } catch (error) {
-        Alert.alert(error);
+        Alert.alert(error.message);
       }
     };
+
     writeData();
   };
 
@@ -125,19 +144,20 @@ const DogForm = () => {
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Button
         style={styles.buttons}
-        icon="home"
+        icon="image"
         mode="contained"
+        disabled={uploading || uploadingForm}
         onPress={() => {
-          resetData();
           setCanUpload(false);
           pickImage();
+          console.log(name);
         }}
       >
         Cargar Imagen
       </Button>
       {image && (
         <>
-          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+          <Image source={{ uri: image }} style={styles.image} />
         </>
       )}
       {image && !uploading && (
@@ -177,16 +197,15 @@ const DogForm = () => {
 
       <Button
         style={styles.buttons}
-        icon="home"
+        icon="publish"
         mode="contained"
-        disabled={!canUpload}
+        loading={uploadingForm}
+        disabled={!canUpload || uploadingForm}
         onPress={() => {
-          //setCanUpload(false);
           handlePetUpload();
-          console.log(breedId, breedName);
         }}
       >
-        Continuar
+        Publicar
       </Button>
       {BreedSelectorMemo()}
       {WriteBreedMemo()}

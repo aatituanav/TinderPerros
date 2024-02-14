@@ -6,15 +6,14 @@ import { getAuth, signOut } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import styles from "../../styles/styles";
 
-const UserOptions = () => {
-  const navigation = useNavigation();
-
+const UserOptions = ({ navigation }) => {
   const handleLogOut = async () => {
     try {
       const auth = getAuth();
       await AsyncStorage.removeItem("user");
+      global.user = null;
       await signOut(auth);
-      navigation.navigate("Login");
+      navigation.navigate("AuthForm");
     } catch (error) {
       console.log(error);
       Alert.alert(error.message);

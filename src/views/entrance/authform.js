@@ -7,12 +7,13 @@ import { Button, Text } from "react-native-paper";
 import styles from "../../styles/styles";
 
 import { useNavigation } from "@react-navigation/native";
+import { getUser } from "../../api/crudusers";
 
 const MAIN = 0;
 const LOGIN = 1;
 const SIGNUP = 2;
 
-const MainEntrance = () => {
+const AuthForm = () => {
   const [mainState, setMainState] = useState(0);
   const navigation = useNavigation();
 
@@ -21,8 +22,15 @@ const MainEntrance = () => {
       try {
         crudData = await AsyncStorage.getItem("user");
         global.user = JSON.parse(crudData);
+
         if (global.user != null) {
-          navigation.navigate("Principal");
+          const userData = await getUser(global.user.uid);
+          console.log(userData);
+          if (userData == null) {
+            navigation.navigate("UserFormRegister");
+          } else {
+            navigation.navigate("Principal");
+          }
         }
       } catch (error) {
         Alert.alert(error.message);
@@ -31,7 +39,7 @@ const MainEntrance = () => {
     fetchuser();
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const backAction = () => {
       // Aquí puedes realizar las acciones que desees cuando el usuario presione el botón de retroceso
       setMainState(MAIN);
@@ -43,7 +51,7 @@ const MainEntrance = () => {
     );
     // Limpiar el efecto al desmontar el componente
     return () => backHandler.remove();
-  }, []);
+  }, []);*/
 
   const handleButtonPress = (state) => {
     // Cambiar el estado principal
@@ -128,4 +136,4 @@ const MainEntrance = () => {
   );
 };
 
-export default MainEntrance;
+export default AuthForm;

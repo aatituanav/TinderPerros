@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../styles/styles";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
+import { getUser } from "../../api/crudusers";
 
 const Login = () => {
   const [user, setUser] = useState("");
@@ -15,14 +16,18 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await signInWithEmailAndPassword(
-        auth,
-        "alvaro.andres1996@hotmail.com",
-        "111111"
-      );
+      const response = await signInWithEmailAndPassword(auth, user, pass);
+
       const userJson = response.user.toJSON();
       await AsyncStorage.setItem("user", JSON.stringify(userJson));
-      navigation.navigate("Principal");
+      global.user = userJson;
+
+      const userData = await getUser(global.user.uid);
+      if (userData == null) {
+        navigation.navigate("UserFormRegister");
+      } else {
+        navigation.navigate("Principal");
+      }
     } catch (error) {
       Alert.alert(error.message);
     }

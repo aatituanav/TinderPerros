@@ -14,9 +14,9 @@ const Tab = createMaterialBottomTabNavigator();
 
 export default function Principal() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="DogForm">
       <Tab.Screen
-        name="Home"
+        name="DogForm"
         component={DogForm}
         options={{
           tabBarLabel: "Dar en Adopción",
@@ -31,7 +31,7 @@ export default function Principal() {
         }}
       />
       <Tab.Screen
-        name="Perros Publicados"
+        name="DogsPublished"
         component={DogsPublished}
         options={{
           tabBarLabel: "Mascotas Publicadas",
@@ -62,7 +62,7 @@ export default function Principal() {
       />
 
       <Tab.Screen
-        name="Options"
+        name="UserOptions"
         component={UserOptions}
         options={{
           tabBarLabel: "Opciones",
