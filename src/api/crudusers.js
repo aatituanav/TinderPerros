@@ -1,11 +1,18 @@
 import { ref, onValue, push } from "firebase/database";
 import { database } from "../../firebase";
 
-const getUser = async (uid) => {
-  const starCountRef = ref(database, "users/" + uid);
-  onValue(starCountRef, (snapshot) => {
-    const data = snapshot.val();
-    return data;
+const getUser = (uid) => {
+  return new Promise((resolve, reject) => {
+    const starCountRef = ref(database, "users/" + uid);
+    onValue(
+      starCountRef,
+      (snapshot) => {
+        resolve(snapshot.val()); // Resolvemos la promesa con los datos
+      },
+      (error) => {
+        reject(error); // Manejamos cualquier error
+      }
+    );
   });
 };
 

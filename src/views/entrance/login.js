@@ -17,7 +17,6 @@ const Login = () => {
   const resetData = () => {
     setUser("");
     setPass("");
-    setSeePass("");
   };
 
   const handleLogin = async () => {
@@ -29,6 +28,8 @@ const Login = () => {
       global.userAuth = userJsonAuth;
 
       const userData = await getUser(global.userAuth.uid);
+      console.log("datos regresados");
+      console.log(userData);
       resetData();
       if (userData == null) {
         navigation.navigate("UserFormRegister");
