@@ -32,13 +32,13 @@ const DogForm = ({ navigation }) => {
   const showWriteDialog = () => setDialogWriteVisible(true);
 
   const resetData = () => {
-    console.log("se reseteans los datos");
     setImage(null);
     setUrlImage("");
     setBreedId("");
     setBreedId("");
     setBreedName("");
     setUploading(false);
+    setNameImageFirestore("");
   };
   const pickImage = async () => {
     try {
@@ -54,9 +54,9 @@ const DogForm = ({ navigation }) => {
         setUploading(true);
         let nameTemp = null;
         if (nameImageFirestore == "") {
-          console.log(global.user);
+          console.log(global.userAuth);
           console.log("se crea un nombre para la imagen");
-          nameTemp = global.user.uid + `_` + new Date();
+          nameTemp = global.userAuth.uid + `_` + new Date();
           setNameImageFirestore(nameTemp);
         }
         //la comparacion es por que no puedo acceder al estado directamente en el mismo metodo cuando lo cambio
@@ -117,7 +117,7 @@ const DogForm = ({ navigation }) => {
       setUploadingForm(true);
       try {
         await push(ref(database, "dogsData"), {
-          user: global.user.uid,
+          user: global.userAuth.uid,
           name: name,
           yearBirth: birthdate,
           description: description,
@@ -150,7 +150,7 @@ const DogForm = ({ navigation }) => {
         onPress={() => {
           setCanUpload(false);
           pickImage();
-          console.log(name);
+          //console.log(name);
         }}
       >
         Cargar Imagen
