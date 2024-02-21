@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { BackHandler, StyleSheet, View } from "react-native";
 import DogForm from "./dogform";
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
@@ -9,10 +9,25 @@ import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import UserOptions from "./useroptions";
 import Emparejamiento from "./emparejamiento";
 import DogsPublished from "./dogsPublished";
+import { useEffect } from "react";
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function Principal() {
+  useEffect(() => {
+    const backAction = () => {
+      //permite mostrar el formulario original (la vista original), es como retroceder xd
+      return true; // Bloquea el retroceso
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   return (
     <Tab.Navigator initialRouteName="DogForm">
       <Tab.Screen

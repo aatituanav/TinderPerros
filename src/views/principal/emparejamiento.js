@@ -1,91 +1,84 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { updateDogsDismissed, updateDogsSelected } from "../../api/crudDogs";
+import { getMissingSelectingDogs } from "../../utils/utils";
 
 const Emparejamiento = () => {
   const [petList, setPetList] = useState([]);
-  const [currentPetIndex, setCurrentPetIndex] = useState(0);
+  const [petsSelected, setPetsSelected] = useState(
+    global.userData.dogsSelected ?? []
+  );
+  const [petsDismmised, setPetsDismmised] = useState(
+    global.userData.dogsDismissed ?? []
+  );
 
   // Simulación de datos de mascotas
   useEffect(() => {
-    // Esto es solo un ejemplo de datos simulados
-    const dummyPetList = [
-      {
-        id: 1,
-        name: "Luna",
-        species: "Dog",
-        breed: "Labrador Retriever",
-        image: require("../../assets/petmachlogo.png"),
-      },
-      {
-        id: 2,
-        name: "Max",
-        species: "Dog",
-        breed: "Golden Retriever",
-        image: require("../../assets/petmachlogo.png"),
-      },
-      {
-        id: 3,
-        name: "Simba",
-        species: "Cat",
-        breed: "Persian",
-        image: require("../../assets/petmachlogo.png"),
-      },
-      // Agrega más mascotas según sea necesario
-    ];
-    setPetList(dummyPetList);
+    retrieveDogs();
   }, []);
 
-  const handleLike = () => {
-    // Aquí puedes implementar la lógica para manejar el "Me gusta" de una mascota
-    // Por ejemplo, puedes registrar el "Me gusta" en una base de datos o realizar alguna otra acción
-    // Por ahora, simplemente avanzamos al siguiente animal en la lista
-    setCurrentPetIndex(currentPetIndex + 1);
+  const selectPet = () => {
+    //codigo para hacer match
+    dogsCopy = [...petList];
+    const dogSelected = dogsCopy.shift();
+    const petSelectedCopy = [...petsSelected];
+    petSelectedCopy.push(dogSelected);
+    setPetsSelected(petSelectedCopy);
+    setPetList(dogsCopy);
+    updateDogsSelected(global.userAuth.uid, petSelectedUid);
   };
 
-  const handleDislike = () => {
-    // Aquí puedes implementar la lógica para manejar el "No me gusta" de una mascota
-    // Por ejemplo, puedes descartar la mascota de la lista o realizar alguna otra acción
-    // Por ahora, simplemente avanzamos al siguiente animal en la lista
-    setCurrentPetIndex(currentPetIndex + 1);
+  const dismissPet = () => {
+    //codigo para rechazar
+    dogsCopy = [...petList];
+    const dogSelected = dogsCopy.shift();
+    const petDismissedCopy = [...petsDismmised];
+    petDismissedCopy.push(dogSelected);
+    setPetsDismmised(petDismissedCopy);
+    setPetList(dogsCopy);
+    updateDogsDismissed(global.userAuth.uid, petDismissedCopy);
   };
 
-  if (petList.length === 0) {
-    return (
-      <View style={styles.container}>
-        <Text>No hay mascotas disponibles.</Text>
-      </View>
+  const retrieveDogs = async () => {
+    const filteredDogList = getMissingSelectingDogs(
+      global.dogsList,
+      petsSelected,
+      petsDismmised
     );
-  }
-
-  if (currentPetIndex >= petList.length) {
-    return (
-      <View style={styles.container}>
-        <Text>No hay más mascotas disponibles.</Text>
-      </View>
-    );
-  }
-
-  const currentPet = petList[currentPetIndex];
+    setPetList(filteredDogList);
+  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.petCard}>
-        <Image source={currentPet.image} style={styles.petImage} />
-        <Text style={styles.petName}>{currentPet.name}</Text>
-        <Text style={styles.petDetails}>
-          {currentPet.species} - {currentPet.breed}
-        </Text>
-      </View>
+      {petList.length > 0 ? (
+        <View style={styles.petCard}>
+          <Image
+            source={{
+              uri: petList[0].urlImage,
+            }}
+            style={styles.petImage}
+          />
+          <Text style={styles.petName}>{petList[0].name}</Text>
+          <Text style={styles.petDetails}>{petList[0].breedName}</Text>
+          <Text style={styles.petDetails}>{petList[0].description}</Text>
+        </View>
+      ) : (
+        <View>
+          <Text>No hay mascotas disponibles</Text>
+        </View>
+      )}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: "red" }]}
-          onPress={handleDislike}
+          onPress={dismissPet}
         >
           <Text style={styles.buttonText}>No me gusta</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: "green" }]}
-          onPress={handleLike}
+          onPress={selectPet}
         >
           <Text style={styles.buttonText}>Me gusta</Text>
         </TouchableOpacity>

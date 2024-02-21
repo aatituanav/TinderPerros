@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { BreedSelector, WriteBreed } from "./components/dogcomponents";
-import { Image, View, StyleSheet, Alert } from "react-native";
+import {
+  Image,
+  View,
+  StyleSheet,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { uploadToFirebase } from "../../api/crudImages";
 import { getBreed } from "../../api/predictbreed";
@@ -8,6 +15,7 @@ import styles from "../../styles/styles";
 import { push, ref } from "firebase/database";
 import { database } from "../../../firebase";
 import { TextInput, Text, Button, ActivityIndicator } from "react-native-paper";
+import { putDog } from "../../api/crudDogs";
 
 const DogForm = ({ navigation }) => {
   const [image, setImage] = useState(null);
@@ -116,15 +124,15 @@ const DogForm = ({ navigation }) => {
     const writeData = async () => {
       setUploadingForm(true);
       try {
-        await push(ref(database, "dogsData"), {
-          user: global.userAuth.uid,
-          name: name,
-          yearBirth: birthdate,
-          description: description,
-          urlImage: urlImage,
-          breedName: breedName,
-          breedId: breedId,
-        });
+        putDog(
+          global.userAuth.uid,
+          name,
+          birthdate,
+          description,
+          urlImage,
+          breedName,
+          breedId
+        ); // guarda en firebase
         resetData();
         setCanUpload(false);
         setDescription("");
@@ -141,75 +149,81 @@ const DogForm = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button
-        style={styles.buttons}
-        icon="image"
-        mode="contained"
-        disabled={uploading || uploadingForm}
-        onPress={() => {
-          setCanUpload(false);
-          pickImage();
-          //console.log(name);
-        }}
-      >
-        Cargar Imagen
-      </Button>
-      {image && (
-        <>
-          <Image source={{ uri: image }} style={styles.image} />
-        </>
-      )}
-      {image && !uploading && (
-        <>
-          <Text variant="titleLarge">Raza: </Text>
-          <Text variant="titleLarge">
-            {breedId == "" ? breedName : global.breeds[breedId]}
-          </Text>
-        </>
-      )}
-      {uploading && (
-        <View>
-          <Text variant="titleLarge">Analizando Imagen</Text>
-          <ActivityIndicator size="large" animating={true} />
-        </View>
-      )}
-      <TextInput
-        style={styles.buttons}
-        label="Nombre"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.buttons}
-        label="Año de nacimiento"
-        value={birthdate}
-        onChangeText={setBirthdate}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.buttons}
-        multiline
-        placeholder="Cuentanos sobre tu mascota"
-        value={description}
-        onChangeText={setDescription}
-      />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior="padding"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 50}
+    >
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Button
+          style={styles.buttons}
+          icon="image"
+          mode="contained"
+          disabled={uploading || uploadingForm}
+          onPress={() => {
+            setCanUpload(false);
+            pickImage();
+            //console.log(name);
+          }}
+        >
+          Cargar Imagen
+        </Button>
+        {image && (
+          <>
+            <Image source={{ uri: image }} style={styles.image} />
+          </>
+        )}
+        {image && !uploading && (
+          <>
+            <Text variant="titleLarge">Raza: </Text>
+            <Text variant="titleLarge">
+              {breedId == "" ? breedName : global.breeds[breedId]}
+            </Text>
+          </>
+        )}
+        {uploading && (
+          <View>
+            <Text variant="titleLarge">Analizando Imagen</Text>
+            <ActivityIndicator size="large" animating={true} />
+          </View>
+        )}
+        <TextInput
+          style={styles.buttons}
+          label="Nombre"
+          value={name}
+          onChangeText={setName}
+        />
+        <TextInput
+          style={styles.buttons}
+          label="Año de nacimiento"
+          value={birthdate}
+          onChangeText={setBirthdate}
+          keyboardType="numeric"
+        />
+        <TextInput
+          style={styles.buttons}
+          multiline
+          placeholder="Cuentanos sobre tu mascota"
+          value={description}
+          onChangeText={setDescription}
+        />
 
-      <Button
-        style={styles.buttons}
-        icon="publish"
-        mode="contained"
-        loading={uploadingForm}
-        disabled={!canUpload || uploadingForm}
-        onPress={() => {
-          handlePetUpload();
-        }}
-      >
-        Publicar
-      </Button>
-      {BreedSelectorMemo()}
-      {WriteBreedMemo()}
-    </View>
+        <Button
+          style={styles.buttons}
+          icon="publish"
+          mode="contained"
+          loading={uploadingForm}
+          disabled={!canUpload || uploadingForm}
+          onPress={() => {
+            handlePetUpload();
+          }}
+        >
+          Publicar
+        </Button>
+        {BreedSelectorMemo()}
+        {WriteBreedMemo()}
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

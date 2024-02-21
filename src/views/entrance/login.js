@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Image, View, StyleSheet, Alert } from "react-native";
+import { Image, View, StyleSheet, Alert, BackHandler } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { auth } from "../../../firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,18 +8,37 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { getUser } from "../../api/crudusers";
 
-const Login = () => {
+const Login = ({ goBack }) => {
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
   const [seePass, setSeePass] = useState(true);
+  const [loading, setLoading] = useState(false);
+
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const backAction = () => {
+      //permite mostrar el formulario original (la vista original), es como retroceder xd
+      goBack(0);
+      return true; // Bloquea el retroceso
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   const resetData = () => {
     setUser("");
     setPass("");
+    setLoading(false);
   };
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       const response = await signInWithEmailAndPassword(auth, user, pass);
 
@@ -28,8 +47,7 @@ const Login = () => {
       global.userAuth = userJsonAuth;
 
       const userData = await getUser(global.userAuth.uid);
-      console.log("datos regresados");
-      console.log(userData);
+      global.userData = userData;
       resetData();
       if (userData == null) {
         navigation.navigate("UserFormRegister");
@@ -38,6 +56,7 @@ const Login = () => {
       }
     } catch (error) {
       Alert.alert(error.message);
+      setLoading(false);
     }
   };
 
@@ -66,6 +85,7 @@ const Login = () => {
         style={styles.buttons}
         icon="login"
         mode="text"
+        loading={loading}
         onPress={handleLogin}
       >
         Iniciar Sesión

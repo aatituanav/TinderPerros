@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { getUser } from "../../api/crudusers";
 import { auth } from "../../../firebase";
 import { signOut } from "firebase/auth";
+import { getDogs } from "../../api/crudDogs";
 
 const MAIN = 0;
 const LOGIN = 1;
@@ -19,15 +20,22 @@ const AuthForm = () => {
   const [mainState, setMainState] = useState(0);
   const navigation = useNavigation();
 
+  const entrar = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Login" }],
+    });
+  };
+
   useEffect(() => {
     const fetchuser = async () => {
       try {
         userAuth = await AsyncStorage.getItem("userAuth");
+
         global.userAuth = JSON.parse(userAuth);
 
         if (global.userAuth != null) {
           const userData = await getUser(global.userAuth.uid);
-          console.log(userData);
           if (userData == null) {
             await AsyncStorage.removeItem("userAuth");
             global.userAuth = null;
@@ -43,7 +51,17 @@ const AuthForm = () => {
       }
     };
     fetchuser();
+    retrieveDogs();
   }, []);
+
+  const retrieveDogs = async () => {
+    const dogscontent = await getDogs();
+    let dogsList = [];
+    for (let dogKey in dogscontent) {
+      dogsList.push(dogscontent[dogKey]);
+    }
+    global.dogsList = dogsList;
+  };
 
   /*useEffect(() => {
     const backAction = () => {
@@ -61,6 +79,7 @@ const AuthForm = () => {
 
   const handleButtonPress = (state) => {
     // Cambiar el estado principal
+    console.log(`se cambia el estado por ${state}`);
     setMainState(state);
   };
 
@@ -130,12 +149,12 @@ const AuthForm = () => {
       )}
       {mainState === LOGIN && (
         <>
-          <Login />
+          <Login goBack={(state) => handleButtonPress(state)} />
         </>
       )}
       {mainState === SIGNUP && (
         <>
-          <Signup />
+          <Signup goBack={(state) => handleButtonPress(state)} />
         </>
       )}
     </View>
