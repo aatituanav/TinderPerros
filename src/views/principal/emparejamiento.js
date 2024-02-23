@@ -1,53 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import { updateDogsDismissed, updateDogsSelected } from "../../api/crudDogs";
-import { getMissingSelectingDogs } from "../../utils/utils";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native"
+import { selectDog } from "../../api/crudDogs";
+import { DISMISS_DOG, SELECT_DOG } from "../../constants/constants";
 
 const Emparejamiento = () => {
   const [petList, setPetList] = useState([]);
-  const [petsSelected, setPetsSelected] = useState(
-    global.userData.dogsSelected ?? []
-  );
-  const [petsDismmised, setPetsDismmised] = useState(
-    global.userData.dogsDismissed ?? []
-  );
 
-  // Simulación de datos de mascotas
   useEffect(() => {
-    retrieveDogs();
+    setPetList(global.dogList);
   }, []);
 
-  const selectPet = () => {
+  const selectPet = async (operation) => {
     //codigo para hacer match
-    dogsCopy = [...petList];
-    const dogSelected = dogsCopy.shift();
-    const petSelectedCopy = [...petsSelected];
-    petSelectedCopy.push(dogSelected);
-    setPetsSelected(petSelectedCopy);
-    setPetList(dogsCopy);
-    updateDogsSelected(global.userAuth.uid, petSelectedUid);
-  };
-
-  const dismissPet = () => {
-    //codigo para rechazar
-    dogsCopy = [...petList];
-    const dogSelected = dogsCopy.shift();
-    const petDismissedCopy = [...petsDismmised];
-    petDismissedCopy.push(dogSelected);
-    setPetsDismmised(petDismissedCopy);
-    setPetList(dogsCopy);
-    updateDogsDismissed(global.userAuth.uid, petDismissedCopy);
-  };
-
-  const retrieveDogs = async () => {
-    const filteredDogList = getMissingSelectingDogs(
-      global.dogsList,
-      petsSelected,
-      petsDismmised
+    const wasSuccessful = await selectDog(
+      global.userAuth.uid,
+      petList[0].uid,
+      operation
     );
-    setPetList(filteredDogList);
+    if (wasSuccessful) {
+      dogsCopy = petList.slice(1);
+      setPetList(dogsCopy);
+    }
   };
 
   return (
@@ -72,15 +45,15 @@ const Emparejamiento = () => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: "red" }]}
-          onPress={dismissPet}
+          onPress={() => selectPet(DISMISS_DOG)}
         >
-          <Text style={styles.buttonText}>No me gusta</Text>
+          <Text style={styles.buttonText}>Siguiente</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: "green" }]}
-          onPress={selectPet}
+          onPress={() => selectPet(SELECT_DOG)}
         >
-          <Text style={styles.buttonText}>Me gusta</Text>
+          <Text style={styles.buttonText}>Adoptar</Text>
         </TouchableOpacity>
       </View>
     </View>

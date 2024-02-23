@@ -62,8 +62,6 @@ const DogForm = ({ navigation }) => {
         setUploading(true);
         let nameTemp = null;
         if (nameImageFirestore == "") {
-          console.log(global.userAuth);
-          console.log("se crea un nombre para la imagen");
           nameTemp = global.userAuth.uid + `_` + new Date();
           setNameImageFirestore(nameTemp);
         }

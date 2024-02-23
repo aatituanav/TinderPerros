@@ -7,6 +7,7 @@ import styles from "../../styles/styles";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { getUser } from "../../api/crudusers";
+import { getDogsUnviewed } from "../../api/crudDogs";
 
 const Login = ({ goBack }) => {
   const [user, setUser] = useState("");
@@ -41,18 +42,21 @@ const Login = ({ goBack }) => {
     setLoading(true);
     try {
       const response = await signInWithEmailAndPassword(auth, user, pass);
-
       const userJsonAuth = response.user.toJSON();
+
       await AsyncStorage.setItem("userAuth", JSON.stringify(userJsonAuth));
       global.userAuth = userJsonAuth;
-
       const userData = await getUser(global.userAuth.uid);
-      global.userData = userData;
       resetData();
-      if (userData == null) {
-        navigation.navigate("UserFormRegister");
-      } else {
+      if (userData) {
+        //traigo los perros cada vez que inicio sesión y almaceno los datos
+        //persisto los datos que faltan y continúo
+        await AsyncStorage.setItem("userData", JSON.stringify(userData));
+        global.dogList = await getDogsUnviewed(userData.dogsSelected);
+        global.userData = userData;
         navigation.navigate("Principal");
+      } else {
+        navigation.navigate("UserFormRegister");
       }
     } catch (error) {
       Alert.alert(error.message);

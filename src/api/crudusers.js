@@ -4,7 +4,8 @@ import { database } from "../../firebase";
 const getUser = (uid) => {
   return new Promise((resolve, reject) => {
     const starCountRef = ref(database, "users/" + uid);
-    get(
+    //le cambie por get, y ya no funcionó, revisar esa wea
+    onValue(
       starCountRef,
       (snapshot) => {
         resolve(snapshot.val()); // Resolvemos la promesa con los datos
