@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native"
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { selectDog } from "../../api/crudDogs";
 import { DISMISS_DOG, SELECT_DOG } from "../../constants/constants";
 
@@ -13,7 +13,7 @@ const Emparejamiento = () => {
   const selectPet = async (operation) => {
     //codigo para hacer match
     const wasSuccessful = await selectDog(
-      global.userAuth.uid,
+      global.userData,
       petList[0].uid,
       operation
     );
@@ -26,36 +26,38 @@ const Emparejamiento = () => {
   return (
     <View style={styles.container}>
       {petList.length > 0 ? (
-        <View style={styles.petCard}>
-          <Image
-            source={{
-              uri: petList[0].urlImage,
-            }}
-            style={styles.petImage}
-          />
-          <Text style={styles.petName}>{petList[0].name}</Text>
-          <Text style={styles.petDetails}>{petList[0].breedName}</Text>
-          <Text style={styles.petDetails}>{petList[0].description}</Text>
-        </View>
+        <>
+          <View style={styles.petCard}>
+            <Image
+              source={{
+                uri: petList[0].urlImage,
+              }}
+              style={styles.petImage}
+            />
+            <Text style={styles.petName}>{petList[0].name}</Text>
+            <Text style={styles.petDetails}>{petList[0].breedName}</Text>
+            <Text style={styles.petDetails}>{petList[0].description}</Text>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: "red" }]}
+              onPress={() => selectPet(DISMISS_DOG)}
+            >
+              <Text style={styles.buttonText}>Siguiente</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: "green" }]}
+              onPress={() => selectPet(SELECT_DOG)}
+            >
+              <Text style={styles.buttonText}>Adoptar</Text>
+            </TouchableOpacity>
+          </View>
+        </>
       ) : (
         <View>
           <Text>No hay mascotas disponibles</Text>
         </View>
       )}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: "red" }]}
-          onPress={() => selectPet(DISMISS_DOG)}
-        >
-          <Text style={styles.buttonText}>Siguiente</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: "green" }]}
-          onPress={() => selectPet(SELECT_DOG)}
-        >
-          <Text style={styles.buttonText}>Adoptar</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };

@@ -4,6 +4,7 @@ import {
   get,
   limitToLast,
   orderByChild,
+  orderByValue,
   push,
   query,
   ref,
@@ -15,7 +16,6 @@ import { SELECT_DOG } from "../constants/constants";
 
 const getDogsUnviewed = async (dogsSelected) => {
   //obtiene todos los perros que no le han aparecido al usuario todavia
-
   const filterDogs = (allDogs, dogsSelected) => {
     /*    
           #allDogs son los perros traidos de la base 
@@ -46,25 +46,9 @@ const getDogsUnviewed = async (dogsSelected) => {
       return null;
     }
   } catch (error) {
-    console.log("Error en metodo getDogs: " + error);
+    console.log("Error en metodo getDogsUnviewed: " + error);
     return null;
   }
-};
-const getDogsPublishedByUserUID = async (userUid) => {
-  //obtiene todos los perros que un usuario ha publicado en la red
-  const refToData = ref(database, "dogsData");
-  const selectQuery = query(refToData, orderByChild("user"), equalTo(userUid));
-  return new Promise((resolve, reject) => {
-    get(selectQuery)
-      .then((snapshot) => {
-        console.log("inside");
-        resolve(snapshot.val());
-      })
-      .catch((error) => {
-        console.log(`error en getDogsPublishedByUserUID: ${error}`);
-        reject(null);
-      });
-  });
 };
 
 const putDog = async (
@@ -91,16 +75,19 @@ const putDog = async (
   });
 };
 
-const selectDog = async (userUid, petUid, operation) => {
+const selectDog = async (user, petUid, operation) => {
   //registra match de una mascota
   //userUid: uid del usuario que dio el match
   //petUid: uid de la mascota a la cual se le dio match
   return new Promise((resolve, reject) => {
     const updates = {};
-    updates["/users/" + userUid + "/dogsSelected/" + petUid] =
+    updates["/users/" + user.uid + "/dogsSelected/" + petUid] =
       operation == SELECT_DOG;
-    updates["/dogSelectedByUser/" + petUid + "/" + userUid] =
-      operation == SELECT_DOG;
+    updates["/dogSelectedByUser/" + petUid + "/" + user.uid] = {
+      operation: operation == SELECT_DOG,
+      name: user.name,
+      gender: user.gender,
+    };
     update(ref(database), updates)
       .then(() => {
         resolve(true);
@@ -112,10 +99,43 @@ const selectDog = async (userUid, petUid, operation) => {
   });
 };
 
-/*const setUsersListbyDog = async (dogUid, userUid) => {
-  //actualizar la lista de personas que hicieron match con determinada mascota
-  const newPostKey = push(child(ref(database), "users")).key;
-  console.log(newPostKey);
-};*/
+const getDogsPublishedByUserUID = async (userUid) => {
+  //obtiene todos los perros que un usuario ha publicado en la red
+  const refToData = ref(database, "dogsData");
+  const selectQuery = query(refToData, orderByChild("user"), equalTo(userUid));
+  return new Promise((resolve, reject) => {
+    get(selectQuery)
+      .then((snapshot) => {
+        console.log("inside");
+        resolve(snapshot.val());
+      })
+      .catch((error) => {
+        console.log(`error en getDogsPublishedByUserUID: ${error}`);
+        reject(null);
+      });
+  });
+};
 
-export { getDogsUnviewed, selectDog, putDog, getDogsPublishedByUserUID };
+const getDogsAdoptionApplicantList = async (dogUid) => {
+  try {
+    const refToData = ref(database, `dogSelectedByUser/${dogUid}`);
+    const selectQuery = query(
+      refToData,
+      orderByChild("operation"),
+      equalTo(true)
+    );
+    const response = await get(selectQuery);
+    return response.val();
+  } catch (error) {
+    console.log("Error en metodo getDogsAdoptionApplicantList: " + error);
+    return null;
+  }
+};
+
+export {
+  getDogsUnviewed,
+  selectDog,
+  putDog,
+  getDogsPublishedByUserUID,
+  getDogsAdoptionApplicantList,
+};

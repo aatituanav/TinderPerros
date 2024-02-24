@@ -8,15 +8,21 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import UserOptions from "./useroptions";
 import Emparejamiento from "./emparejamiento";
-import DogsPublished from "./dogsPublished";
 import { useEffect } from "react";
+import DogsPublishedMain from "./dogspublished/dogspublishedmain";
+import { useNavigationState } from "@react-navigation/native";
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function Principal() {
+  const navigationState = useNavigationState((state) => state);
+
   useEffect(() => {
     const backAction = () => {
       //permite mostrar el formulario original (la vista original), es como retroceder xd
+
+      console.log(navigationState.routes[0].name);
+
       return true; // Bloquea el retroceso
     };
 
@@ -46,8 +52,8 @@ export default function Principal() {
         }}
       />
       <Tab.Screen
-        name="DogsPublished"
-        component={DogsPublished}
+        name="DogsPublishedMain"
+        component={DogsPublishedMain}
         options={{
           tabBarLabel: "Mascotas Publicadas",
           tabBarIcon: ({ color, size }) => (

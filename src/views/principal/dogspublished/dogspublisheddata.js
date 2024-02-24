@@ -9,17 +9,18 @@ import {
 } from "react-native";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
-import { getDogsPublishedByUserUID } from "../../api/crudDogs";
-import styles from "../../styles/styles";
+import { getDogsPublishedByUserUID } from "../../../api/crudDogs";
+import styles from "../../../styles/styles";
 import { Divider, Menu, TouchableRipple } from "react-native-paper";
 
-const DogsPublished = () => {
+const DogsPublishedData = ({ navigation }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState({ x: 0, y: 0 });
   const [dogSelected, setDogSelected] = useState("");
   const [dogsList, setDogsList] = useState([]);
 
   useEffect(() => {
+    console.log("se renderiza DogsPublishedData");
     const traerPerrosPublicados = async (userUid) => {
       const temp = Object.values(
         await getDogsPublishedByUserUID(global.userAuth.uid)
@@ -102,6 +103,9 @@ const DogsPublished = () => {
             <Menu.Item
               onPress={(a) => {
                 closeMenu();
+                navigation.navigate("AdoptionAplicantsList", {
+                  dogUid: dogSelected,
+                });
               }}
               title="Examinar Solicitantes"
               leadingIcon="clipboard-list"
@@ -120,4 +124,4 @@ const DogsPublished = () => {
   );
 };
 
-export default DogsPublished;
+export default DogsPublishedData;

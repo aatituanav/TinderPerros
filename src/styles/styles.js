@@ -7,8 +7,8 @@ const styles = StyleSheet.create({
   },
   centerContainer: {
     flex: 1,
-    alignItems:'center',
-    justifyContent:'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   login: {
     alignItems: "center",
@@ -39,6 +39,13 @@ const styles = StyleSheet.create({
 
   dp_datatext_container: {
     justifyContent: "center",
+  },
+
+  aal_component: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    padding: 10,
   },
 });
 

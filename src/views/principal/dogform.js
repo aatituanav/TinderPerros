@@ -137,7 +137,7 @@ const DogForm = ({ navigation }) => {
         setBirthdate("");
         setName("");
         setUploadingForm(false);
-        navigation.navigate("DogsPublished"); // Navega a la otra pestaña
+        navigation.navigate("DogsPublishedMain"); // Navega a la otra pestaña
       } catch (error) {
         Alert.alert(error.message);
       }
