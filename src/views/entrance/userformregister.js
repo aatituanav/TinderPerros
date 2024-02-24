@@ -61,7 +61,6 @@ const UserFormRegister = ({ navigation }) => {
           `userImages/` + global.userAuth.uid
         );
         putUser(global.userAuth.uid, name, gender, downloadUrl, idnumber);
-        
 
         global.userData = {
           uid: global.userAuth.uid,
@@ -90,14 +89,7 @@ const UserFormRegister = ({ navigation }) => {
     }
   };
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-      }}
-    >
+    <View style={styles.container}>
       <Text variant="titleLarge" style={{ paddingVertical: 20 }}>
         Datos de Registro
       </Text>
@@ -133,7 +125,7 @@ const UserFormRegister = ({ navigation }) => {
       <View style={styles.buttons}>
         <DropDown
           label={"Genero"}
-          style={{ backgroundColor: "orange", width: 100 }}
+          style={styles.ufr_dropdown}
           visible={showDropDown}
           showDropDown={() => setShowDropDown(true)}
           onDismiss={() => setShowDropDown(false)}

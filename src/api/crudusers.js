@@ -1,6 +1,8 @@
 import { ref, onValue, push, set, get } from "firebase/database";
 import { database } from "../../firebase";
 
+
+
 const getUser = (uid) => {
   return new Promise((resolve, reject) => {
     const starCountRef = ref(database, "users/" + uid);

@@ -13,7 +13,7 @@ global.breeds = breeds;
 export default function App() {
   return (
     <PaperProvider>
-      <Index />
+      <TestFile />
     </PaperProvider>
   );
 }

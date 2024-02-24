@@ -1,14 +1,14 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   buttons: {
     width: "80%",
     margin: 3,
-  },
-  centerContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
   login: {
     alignItems: "center",
@@ -46,6 +46,50 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     padding: 10,
+  },
+
+  e_petCard: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 20,
+    alignItems: "center",
+  },
+  e_petImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  e_petName: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  e_petDetails: {
+    fontSize: 16,
+    color: "#666",
+  },
+  e_buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+  },
+  e_button: {
+    width: 100,
+    height: 40,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  e_buttonText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  ufr_dropdown: {
+    backgroundColor: "orange",
+    width: 100,
   },
 });
 

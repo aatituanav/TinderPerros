@@ -4,11 +4,13 @@ import { selectDog } from "../../api/crudDogs";
 import { DISMISS_DOG, SELECT_DOG } from "../../constants/constants";
 import { ActivityIndicator } from "react-native-paper";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
+import styles from "../../styles/styles";
 
 const Emparejamiento = () => {
   const [petList, setPetList] = useState(null);
 
   useEffect(() => {
+    console.log("se renderiza Emparejamiento");
     setPetList(global.dogList);
   }, []);
 
@@ -44,29 +46,29 @@ const Emparejamiento = () => {
         </>
       ) : (
         <>
-          <View style={styles.petCard}>
+          <View style={styles.e_petCard}>
             <Image
               source={{
                 uri: petList[0].urlImage,
               }}
-              style={styles.petImage}
+              style={styles.e_petImage}
             />
-            <Text style={styles.petName}>{petList[0].name}</Text>
-            <Text style={styles.petDetails}>{petList[0].breedName}</Text>
-            <Text style={styles.petDetails}>{petList[0].description}</Text>
+            <Text style={styles.e_petName}>{petList[0].name}</Text>
+            <Text style={styles.e_petDetails}>{petList[0].breedName}</Text>
+            <Text style={styles.e_petDetails}>{petList[0].description}</Text>
           </View>
-          <View style={styles.buttonContainer}>
+          <View style={styles.e_buttonContainer}>
             <TouchableOpacity
-              style={[styles.button, { backgroundColor: "red" }]}
+              style={[styles.e_button, { backgroundColor: "red" }]}
               onPress={() => selectPet(DISMISS_DOG)}
             >
-              <Text style={styles.buttonText}>Siguiente</Text>
+              <Text style={styles.e_buttonText}>Siguiente</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.button, { backgroundColor: "green" }]}
+              style={[styles.e_button, { backgroundColor: "green" }]}
               onPress={() => selectPet(SELECT_DOG)}
             >
-              <Text style={styles.buttonText}>Adoptar</Text>
+              <Text style={styles.e_buttonText}>Adoptar</Text>
             </TouchableOpacity>
           </View>
         </>
@@ -74,53 +76,5 @@ const Emparejamiento = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-  },
-  petCard: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    padding: 20,
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  petImage: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    marginBottom: 10,
-  },
-  petName: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  petDetails: {
-    fontSize: 16,
-    color: "#666",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "100%",
-  },
-  button: {
-    width: 100,
-    height: 40,
-    borderRadius: 5,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-  },
-});
 
 export default Emparejamiento;

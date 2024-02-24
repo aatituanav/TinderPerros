@@ -1,31 +1,31 @@
 import React, { useState, useMemo, useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  SafeAreaView,
-  FlatList,
-  Image,
-} from "react-native";
+import { View, Text, FlatList, Image } from "react-native";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
 import { getDogsPublishedByUserUID } from "../../../api/crudDogs";
 import styles from "../../../styles/styles";
-import { Divider, Menu, TouchableRipple } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Divider,
+  Menu,
+  TouchableRipple,
+} from "react-native-paper";
 
 const DogsPublishedData = ({ navigation }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState({ x: 0, y: 0 });
   const [dogSelected, setDogSelected] = useState("");
-  const [dogsList, setDogsList] = useState([]);
+  const [dogsList, setDogsList] = useState(null);
 
   useEffect(() => {
     console.log("se renderiza DogsPublishedData");
     const traerPerrosPublicados = async (userUid) => {
-      const temp = Object.values(
-        await getDogsPublishedByUserUID(global.userAuth.uid)
-      );
-      setDogsList(temp);
+      const temp = await getDogsPublishedByUserUID(userUid);
+      if (temp) {
+        setDogsList(Object.values(temp));
+      } else {
+        setDogsList([]);
+      }
     };
     traerPerrosPublicados(global.userAuth.uid);
   }, []);
@@ -82,9 +82,14 @@ const DogsPublishedData = ({ navigation }) => {
 
   return (
     <>
-      {dogsList.length === 0 ? (
+      {dogsList == null ? (
+        <>
+          <Text variant="titleLarge">Cargando Datos...</Text>
+          <ActivityIndicator size="large" animating={true} />
+        </>
+      ) : dogsList.length === 0 ? (
         <View style={styles.centerContainer}>
-          <Text>No has subido ninguna mascota para ser adoptada</Text>
+          <Text>No has publicado ninguna mascota</Text>
           <FontAwesome6
             name="face-sad-tear"
             size={100}
@@ -93,7 +98,7 @@ const DogsPublishedData = ({ navigation }) => {
           />
         </View>
       ) : (
-        <View>
+        <>
           <FlatList
             data={dogsList}
             renderItem={renderItem}
@@ -118,7 +123,7 @@ const DogsPublishedData = ({ navigation }) => {
               leadingIcon="lead-pencil"
             />
           </Menu>
-        </View>
+        </>
       )}
     </>
   );

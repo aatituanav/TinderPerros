@@ -106,7 +106,6 @@ const getDogsPublishedByUserUID = async (userUid) => {
   return new Promise((resolve, reject) => {
     get(selectQuery)
       .then((snapshot) => {
-        console.log("inside");
         resolve(snapshot.val());
       })
       .catch((error) => {
