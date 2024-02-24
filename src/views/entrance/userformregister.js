@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import DropDown from "react-native-paper-dropdown";
 import styles from "../../styles/styles";
 import { putUser } from "../../api/crudusers";
+import { getDogsUnviewed } from "../../api/crudDogs";
 
 const UserFormRegister = ({ navigation }) => {
   const [image, setImage] = useState("");
@@ -69,6 +70,7 @@ const UserFormRegister = ({ navigation }) => {
           urlImage: downloadUrl,
           idnumber: idnumber,
         };
+        global.dogList = await getDogsUnviewed(null);
         await AsyncStorage.setItem("userData", JSON.stringify(global.userData));
         setUploadingForm(false);
         resetData();

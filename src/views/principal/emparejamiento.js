@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { selectDog } from "../../api/crudDogs";
 import { DISMISS_DOG, SELECT_DOG } from "../../constants/constants";
+import { ActivityIndicator } from "react-native-paper";
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
 const Emparejamiento = () => {
-  const [petList, setPetList] = useState([]);
+  const [petList, setPetList] = useState(null);
 
   useEffect(() => {
     setPetList(global.dogList);
@@ -25,7 +27,22 @@ const Emparejamiento = () => {
 
   return (
     <View style={styles.container}>
-      {petList.length > 0 ? (
+      {petList == null ? (
+        <View>
+          <Text variant="titleLarge">Cargando Datos...</Text>
+          <ActivityIndicator size="large" animating={true} />
+        </View>
+      ) : petList.length === 0 ? (
+        <>
+          <Text>Por ahora no hay mascotas</Text>
+          <FontAwesome6
+            name="face-sad-tear"
+            size={100}
+            color="#000"
+            style={{ marginRight: 0 }}
+          />
+        </>
+      ) : (
         <>
           <View style={styles.petCard}>
             <Image
@@ -53,10 +70,6 @@ const Emparejamiento = () => {
             </TouchableOpacity>
           </View>
         </>
-      ) : (
-        <View>
-          <Text>No hay mascotas disponibles</Text>
-        </View>
       )}
     </View>
   );
