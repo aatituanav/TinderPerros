@@ -4,8 +4,8 @@ import { View } from "react-native";
 import { Button } from "react-native-paper";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
-import styles from "../../styles/styles";
-import { auth } from "../../../firebase";
+import styles from "../../../styles/styles";
+import { auth } from "../../../../firebase";
 
 const UserOptions = ({ navigation }) => {
   const handleLogOut = async () => {
@@ -21,6 +21,10 @@ const UserOptions = ({ navigation }) => {
       Alert.alert(error.message);
     }
   };
+  const editData =  () => {
+navigation.navigate("UserOptionMain")
+
+  }
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -44,7 +48,7 @@ const UserOptions = ({ navigation }) => {
         style={styles.buttons}
         icon="logout"
         mode="contained"
-        onPress={handleLogOut}
+        onPress={editData}
       >
         Editar datos de usuario
       </Button>

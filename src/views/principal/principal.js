@@ -6,7 +6,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
-import UserOptions from "./useroptions";
+import UserOptionMain from "./userOptions/userOptionMain";
 import Emparejamiento from "./emparejamiento";
 import { useEffect } from "react";
 import DogsPublishedMain from "./dogspublished/dogspublishedmain";
@@ -83,8 +83,8 @@ export default function Principal() {
       />
 
       <Tab.Screen
-        name="UserOptions"
-        component={UserOptions}
+        name="userOptionMain"
+        component={UserOptionMain}
         options={{
           tabBarLabel: "Opciones",
           tabBarIcon: ({ color, size }) => (
