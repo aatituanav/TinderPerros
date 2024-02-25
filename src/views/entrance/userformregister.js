@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Image, View, StyleSheet, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { uploadToFirebase } from "../../api/crudImages";
-import { getBreed } from "../../api/predictbreed";
-import { TextInput, Text, Button, ActivityIndicator } from "react-native-paper";
+import { getBlurHash, uploadToFirebase } from "../../api/crudImages";
+import { TextInput, Text, Button } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DropDown from "react-native-paper-dropdown";
+import { manipulateAsync } from "expo-image-manipulator";
 import styles from "../../styles/styles";
 import { putUser } from "../../api/crudusers";
 import { getDogsUnviewed } from "../../api/crudDogs";
@@ -14,9 +14,11 @@ const UserFormRegister = ({ navigation }) => {
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [idnumber, setIdNumber] = useState("");
+  const [urlImage, setUrlImage] = useState(null);
   const [uploadingForm, setUploadingForm] = useState(false);
   const [gender, setGender] = useState("");
   const [showDropDown, setShowDropDown] = useState(false);
+  const [blurHash, setBlurHash] = useState(null);
 
   const genderList = [
     {
@@ -33,6 +35,8 @@ const UserFormRegister = ({ navigation }) => {
     setImage("");
     setName("");
     setIdNumber("");
+    setUrlImage(null);
+    setBlurHash(null);
     setGender("");
   };
   const pickImage = async () => {
@@ -40,12 +44,31 @@ const UserFormRegister = ({ navigation }) => {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4, 3],
-        quality: 0.2,
+        aspect: [1, 1],
+        quality: 0.5,
       });
       if (!result.canceled) {
         const imageUri = result.assets[0].uri;
-        setImage(imageUri);
+        const manipResult = await manipulateAsync(
+          imageUri,
+          [
+            {
+              resize: {
+                height: 600,
+              },
+            },
+          ],
+          { compress: 0.5 }
+        );
+        setImage(manipResult.uri);
+        const downloadUrl = await uploadToFirebase(
+          manipResult.uri,
+          `userImages/` + global.userAuth.uid
+        );
+        setUrlImage(downloadUrl);
+        getBlurHash(downloadUrl).then((response) => {
+          setBlurHash(response.blurHash);
+        });
       }
     } catch (error) {
       console.error(error);
@@ -56,18 +79,22 @@ const UserFormRegister = ({ navigation }) => {
     const writeData = async () => {
       setUploadingForm(true);
       try {
-        const downloadUrl = await uploadToFirebase(
-          image,
-          `userImages/` + global.userAuth.uid
+        putUser(
+          global.userAuth.uid,
+          name,
+          gender,
+          urlImage,
+          idnumber,
+          blurHash
         );
-        putUser(global.userAuth.uid, name, gender, downloadUrl, idnumber);
 
         global.userData = {
           uid: global.userAuth.uid,
           name: name,
           gender: gender,
-          urlImage: downloadUrl,
+          urlImage: urlImage,
           idnumber: idnumber,
+          blurHash: blurHash,
         };
         global.dogList = await getDogsUnviewed(null);
         await AsyncStorage.setItem("userData", JSON.stringify(global.userData));
@@ -140,7 +167,7 @@ const UserFormRegister = ({ navigation }) => {
         icon="account"
         loading={uploadingForm}
         mode="contained"
-        disabled={uploadingForm}
+        disabled={uploadingForm || blurHash == null || urlImage == null}
         onPress={handleUserUpload}
       >
         Finalizar Registro

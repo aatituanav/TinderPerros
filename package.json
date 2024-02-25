@@ -26,7 +26,8 @@
     "react-native-screens": "~3.29.0",
     "react-native-web": "~0.19.6",
     "react-native-gesture-handler": "~2.14.0",
-    "expo-image": "~1.10.6"
+    "expo-image": "~1.10.6",
+    "expo-image-manipulator": "~11.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

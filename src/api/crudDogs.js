@@ -58,7 +58,8 @@ const putDog = async (
   description,
   urlImage,
   breedName,
-  breedId
+  breedId,
+  blurHash
 ) => {
   //crear registro de una mascota
   const reference = push(ref(database, "dogsData"), {
@@ -69,6 +70,7 @@ const putDog = async (
     urlImage: urlImage,
     breedName: breedName,
     breedId: breedId,
+    blurHash: blurHash,
   });
   const a = await update(ref(database, "dogsData/" + reference.key), {
     uid: reference.key,

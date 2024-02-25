@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { View, Text, FlatList, Image } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
-
+import { Image } from "expo-image";
 import { getDogsPublishedByUserUID } from "../../../api/crudDogs";
 import styles from "../../../styles/styles";
 import {
@@ -64,9 +64,9 @@ const DogsPublishedData = ({ navigation }) => {
           >
             <Image
               style={styles.dp_imageinList}
-              source={{
-                uri: item.urlImage,
-              }}
+              source={item.urlImage}
+              placeholder={item.blurHash}
+              transition={1000}
             />
             <View style={styles.dp_datatext_container}>
               <Text>Nombre: {item.name}</Text>
@@ -81,14 +81,14 @@ const DogsPublishedData = ({ navigation }) => {
   };
 
   return (
-    <>
+    <View style={styles.container}>
       {dogsList == null ? (
-        <>
+        <View style={styles.container}>
           <Text variant="titleLarge">Cargando Datos...</Text>
           <ActivityIndicator size="large" animating={true} />
-        </>
+        </View>
       ) : dogsList.length === 0 ? (
-        <View style={styles.centerContainer}>
+        <View style={styles.container}>
           <Text>No has publicado ninguna mascota</Text>
           <FontAwesome6
             name="face-sad-tear"
@@ -98,7 +98,7 @@ const DogsPublishedData = ({ navigation }) => {
           />
         </View>
       ) : (
-        <>
+        <View style={{ width: "100%" }}>
           <FlatList
             data={dogsList}
             renderItem={renderItem}
@@ -123,9 +123,9 @@ const DogsPublishedData = ({ navigation }) => {
               leadingIcon="lead-pencil"
             />
           </Menu>
-        </>
+        </View>
       )}
-    </>
+    </View>
   );
 };
 

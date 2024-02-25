@@ -5,6 +5,11 @@ from flask import Flask, request, jsonify
 from PIL import Image
 import numpy as np
 from flask_cors import CORS
+import blurhash
+import numpy
+
+
+
 
 import os
 def loadProcessor():
@@ -57,6 +62,28 @@ def predict():
     response = jsonify(response_data)
     return response
 
+    
+@app.route('/api/getblurhash', methods=['POST'])
+def getBlurHash():
+    print('asdfads')
+    data = request.get_json()
+    # Verificar si 'image_url' está presente en el objeto JSON o en la cadena de consulta
+    if data and 'image_url' in data:
+        url = data['image_url']
+    elif request.args.get('image_url'):
+        url = request.args.get('image_url')
+    else:
+        return jsonify({'error': 'Parámetro "image_url" no proporcionado'}), 400
+    
+    image = Image.open(requests.get(url, stream=True).raw)
+    ancho, alto = image.size
+    imagen_redimensionada = image.resize((ancho//6, alto//6))
+
+    blur = blurhash.encode(numpy.array(imagen_redimensionada.convert("RGB")), 8, 8, False)
+    response_data = {'blurHash': blur}
+    response = jsonify(response_data)
+    return response
+    
     
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

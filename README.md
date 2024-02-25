@@ -23,6 +23,7 @@ Todo esta almacenado en src de la siguiente manera
 Server
 
 Activar el entorno virtual
+Python 3.11.4
 Set-ExecutionPolicy RemoteSigned -Scope Process
 .\.env\Scripts\activate  
 

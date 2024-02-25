@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { selectDog } from "../../api/crudDogs";
 import { DISMISS_DOG, SELECT_DOG } from "../../constants/constants";
 import { ActivityIndicator } from "react-native-paper";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import styles from "../../styles/styles";
+import { Image } from "expo-image";
 
 const Emparejamiento = () => {
   const [petList, setPetList] = useState(null);
@@ -48,10 +49,10 @@ const Emparejamiento = () => {
         <>
           <View style={styles.e_petCard}>
             <Image
-              source={{
-                uri: petList[0].urlImage,
-              }}
               style={styles.e_petImage}
+              source={petList[0].urlImage}
+              placeholder={petList[0].blurHash}
+              transition={400}
             />
             <Text style={styles.e_petName}>{petList[0].name}</Text>
             <Text style={styles.e_petDetails}>{petList[0].breedName}</Text>

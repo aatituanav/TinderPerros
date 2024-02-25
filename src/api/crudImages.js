@@ -4,6 +4,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { APIDOGBREED } from "@env";
 
 const uploadToFirebase = async (imageUri, name, onProgress) => {
   try {
@@ -37,5 +38,33 @@ const uploadToFirebase = async (imageUri, name, onProgress) => {
     throw error;
   }
 };
+
+export async function getBlurHash(imageUrl) {
+  const localUrl = "http://192.168.1.65:8080/api/getblurhash";
+  const data = {
+    image_url: imageUrl,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+
+  try {
+    const response = await fetch(localUrl, options);
+    if (!response.ok) {
+      throw new Error(
+        "Error al obtener los datos. Código de estado: " + response.status
+      );
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error al obtener los datos:", error);
+    return null; // Retorna null en caso de error
+  }
+}
 
 export { uploadToFirebase };

@@ -9,12 +9,13 @@ import {
   Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { uploadToFirebase } from "../../api/crudImages";
+import { getBlurHash, uploadToFirebase } from "../../api/crudImages";
 import { getBreed } from "../../api/predictbreed";
 import styles from "../../styles/styles";
 import { push, ref } from "firebase/database";
 import { database } from "../../../firebase";
 import { TextInput, Text, Button, ActivityIndicator } from "react-native-paper";
+import { manipulateAsync } from "expo-image-manipulator";
 import { putDog } from "../../api/crudDogs";
 
 const DogForm = ({ navigation }) => {
@@ -25,6 +26,7 @@ const DogForm = ({ navigation }) => {
   const [breedName, setBreedName] = useState("");
   const [breedId, setBreedId] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [blurHash, setBlurHash] = useState(null);
   const [uploadingForm, setUploadingForm] = useState(false);
   const [description, setDescription] = useState("");
   const [canUpload, setCanUpload] = useState(false);
@@ -44,6 +46,7 @@ const DogForm = ({ navigation }) => {
     setUrlImage("");
     setBreedId("");
     setBreedId("");
+    setBlurHash(null);
     setBreedName("");
     setUploading(false);
     setNameImageFirestore("");
@@ -53,12 +56,23 @@ const DogForm = ({ navigation }) => {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4, 3],
-        quality: 0.5,
+        aspect: [1, 1],
+        quality: 0.3,
       });
       if (!result.canceled) {
         const imageUri = result.assets[0].uri;
-        setImage(imageUri);
+        const manipResult = await manipulateAsync(
+          imageUri,
+          [
+            {
+              resize: {
+                height: 600,
+              },
+            },
+          ],
+          { compress: 0.4 }
+        );
+        setImage(manipResult.uri);
         setUploading(true);
         let nameTemp = null;
         if (nameImageFirestore == "") {
@@ -67,25 +81,18 @@ const DogForm = ({ navigation }) => {
         }
         //la comparacion es por que no puedo acceder al estado directamente en el mismo metodo cuando lo cambio
         const downloadUrl = await uploadToFirebase(
-          imageUri,
+          manipResult.uri,
           `dogsImages/` +
             (nameImageFirestore == "" ? nameTemp : nameImageFirestore)
         );
         setUrlImage(downloadUrl);
+        getBlurHash(downloadUrl).then((response) => {
+          setBlurHash(response.blurHash);
+        });
         const breeds = await getBreed(downloadUrl);
         setBreedsList(breeds.breed);
         setPunctuationList(breeds.score);
-        //calculo la suma de las puntuaciones para ver si se detecto una mascota o no
-        const suma = breeds.score.reduce(
-          (acumulador, valorActual) => acumulador + valorActual,
-          0
-        );
-
-        if (suma < 0.1) {
-          Alert.alert("No se detectó ningún perro");
-        } else {
-          setDialogVisible(true);
-        }
+        setDialogVisible(true);
         setUploading(false);
         setCanUpload(true);
       }
@@ -129,7 +136,8 @@ const DogForm = ({ navigation }) => {
           description,
           urlImage,
           breedName,
-          breedId
+          breedId,
+          blurHash
         ); // guarda en firebase
         resetData();
         setCanUpload(false);
@@ -211,7 +219,7 @@ const DogForm = ({ navigation }) => {
           icon="publish"
           mode="contained"
           loading={uploadingForm}
-          disabled={!canUpload || uploadingForm}
+          disabled={!canUpload || uploadingForm || blurHash == null}
           onPress={() => {
             handlePetUpload();
           }}
