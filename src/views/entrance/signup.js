@@ -2,13 +2,9 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Image, View, StyleSheet, Alert, BackHandler } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import { auth } from "../../../firebase";
 import styles from "../../styles/styles";
 import { useNavigation } from "@react-navigation/native";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { createUserWithEmail, verifyEmail } from "../../api/auth";
 
 const Signup = ({ goBack }) => {
   const [user, setUser] = useState("");
@@ -16,8 +12,6 @@ const Signup = ({ goBack }) => {
   const [confirmPass, setConfirmPass] = useState("");
   const [creatingUser, setCreatingUser] = useState(false);
   const navigation = useNavigation();
-
-
 
   useEffect(() => {
     //permite mostrar el formulario original (la vista original), es como retroceder xd
@@ -43,16 +37,27 @@ const Signup = ({ goBack }) => {
       Alert.alert("Las contraseñas no coinciden");
       return;
     }
-    try {
-      setCreatingUser(true);
-      const response = await createUserWithEmailAndPassword(auth, user, pass);
-      const userJsonAuth = response.user.toJSON();
-      await AsyncStorage.setItem("userAuth", JSON.stringify(userJsonAuth));
-      global.userAuth = userJsonAuth;
+
+    const response = await createUserWithEmail(user, pass);
+    if (response.success) {
+      //const userJsonAuth = response.user.toJSON();
+      //await AsyncStorage.setItem("userAuth", JSON.stringify(userJsonAuth));
+      //global.userAuth = userJsonAuth;
+      const result = await verifyEmail();
+      console.log(result);
+      Alert.alert(
+        "Usuario Creado",
+        "Se ha enviado un correo de verificación. Por favor, revisa tu bandeja de entrada, e inicia sesión nuevamente",
+        [
+          {
+            text: "Aceptar",
+            onPress: () => goBack(0),
+          },
+        ]
+      );
       clearData();
-      navigation.navigate("UserFormRegister");
-    } catch (error) {
-      Alert.alert(error.message);
+    } else {
+      Alert.alert(response.error);
       setCreatingUser(false);
     }
   };

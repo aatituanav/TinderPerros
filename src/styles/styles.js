@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     width: "80%",
-    margin: 3,
+    margin: 2,
   },
   login: {
     alignItems: "center",
