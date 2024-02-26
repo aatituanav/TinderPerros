@@ -81,7 +81,6 @@ export default function Principal() {
           ),
         }}
       />
-
       <Tab.Screen
         name="userOptionMain"
         component={UserOptionMain}

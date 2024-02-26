@@ -16,6 +16,7 @@ const DogsPublishedData = ({ navigation }) => {
   const [menuAnchor, setMenuAnchor] = useState({ x: 0, y: 0 });
   const [dogSelected, setDogSelected] = useState("");
   const [dogsList, setDogsList] = useState(null);
+  const [dogsName, setDogsName] = useState(null);
 
   useEffect(() => {
     console.log("se renderiza DogsPublishedData");
@@ -51,6 +52,7 @@ const DogsPublishedData = ({ navigation }) => {
         rippleColor="rgba(0, 0, 0, .32)"
         onPress={(e) => {
           setDogSelected(item.uid);
+          setDogsName(item.name);
           onIconPress(e);
         }}
       >
@@ -110,6 +112,7 @@ const DogsPublishedData = ({ navigation }) => {
                 closeMenu();
                 navigation.navigate("AdoptionAplicantsList", {
                   dogUid: dogSelected,
+                  dogName: dogsName,
                 });
               }}
               title="Examinar Solicitantes"

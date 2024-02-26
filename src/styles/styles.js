@@ -1,4 +1,7 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
+
+const dimensions = Dimensions.get("window");
+const imageWidth = dimensions.width * 0.9;
 
 const styles = StyleSheet.create({
   container: {
@@ -50,7 +53,7 @@ const styles = StyleSheet.create({
   },
 
   e_petCard: {
-    borderWidth: 1,
+    width: "100%",
     borderColor: "#ccc",
     borderRadius: 10,
     padding: 20,
@@ -58,8 +61,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   e_petImage: {
-    width: 200,
-    height: 200,
+    height: imageWidth,
+    width: imageWidth,
     borderRadius: 10,
     marginBottom: 10,
   },
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
   },
   e_button: {
     width: 100,
-    height: 40,
+    height: 100,
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",

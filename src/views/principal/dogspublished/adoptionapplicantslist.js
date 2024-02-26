@@ -20,6 +20,7 @@ export default function AdoptionAplicantsList({ navigation, route }) {
   const [usersApplingList, setUsersApplingList] = useState(null);
   const [userSelectedData, setUserSelectedData] = useState(null);
   const [showUser, setShowUser] = useState(false);
+  const [dogName, setDogName] = useState(false);
 
   useEffect(() => {
     console.log("se renderiza AdoptionAplicantsList");
@@ -33,7 +34,8 @@ export default function AdoptionAplicantsList({ navigation, route }) {
     );
 
     const getUsers = async () => {
-      const { dogUid } = route.params;
+      const { dogUid, dogName } = route.params;
+      setDogName(dogName);
       const dogs = await getDogsAdoptionApplicantList(dogUid);
       if (dogs) {
         const temp = Object.keys(dogs).map((key) => ({ ...dogs[key], key }));
@@ -50,6 +52,14 @@ export default function AdoptionAplicantsList({ navigation, route }) {
   const showUserSelected = async (userUid) => {
     setUserSelectedData(await getUser(userUid));
     setShowUser(true);
+  };
+  const HeaderComponent = () => {
+    return (
+      <View style={{ paddingVertical: 10 }}>
+        <Text variant="titleSmall">Personas que quieren a {dogName}</Text>
+        <Divider bold/>
+      </View>
+    );
   };
 
   const renderItem = ({ item }) => {
@@ -94,6 +104,8 @@ export default function AdoptionAplicantsList({ navigation, route }) {
             data={usersApplingList}
             renderItem={renderItem}
             keyExtractor={(item) => item.key}
+            ListHeaderComponent={HeaderComponent}
+            ListHeaderComponentStyle={styles.container}
           />
           <Portal>
             <Dialog

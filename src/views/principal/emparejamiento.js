@@ -60,13 +60,13 @@ const Emparejamiento = () => {
           </View>
           <View style={styles.e_buttonContainer}>
             <TouchableOpacity
-              style={[styles.e_button, { backgroundColor: "red" }]}
+              style={[styles.e_button, { backgroundColor: "#FF9E9E" }]}
               onPress={() => selectPet(DISMISS_DOG)}
             >
               <Text style={styles.e_buttonText}>Siguiente</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.e_button, { backgroundColor: "green" }]}
+              style={[styles.e_button, { backgroundColor: "#ABFF9E" }]}
               onPress={() => selectPet(SELECT_DOG)}
             >
               <Text style={styles.e_buttonText}>Adoptar</Text>
