@@ -7,6 +7,9 @@ import breeds from "./src/assets/breeds.json"; // Importa el archivo JSON
 import * as SplashScreen from "expo-splash-screen";
 import TestFile from "./src/test/testfile";
 import { useCallback, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getUser } from "./src/api/crudusers";
+import { getDogsUnviewed } from "./src/api/crudDogs";
 
 AppRegistry.registerComponent(expo.name, () => App);
 
@@ -19,7 +22,12 @@ export default function App() {
       try {
         // Pre-load fonts, make any API calls you need to do here
         global.breeds = breeds;
-
+        userAuth = await AsyncStorage.getItem("userAuth");
+        global.userAuth = JSON.parse(userAuth);
+        if (global.userAuth) {
+          global.userData = await getUser(global.userAuth.uid);
+          global.dogList = await getDogsUnviewed(userData.dogsSelected);
+        }
       } catch (e) {
         console.warn(e);
       } finally {

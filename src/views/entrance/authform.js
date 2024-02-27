@@ -23,20 +23,14 @@ const AuthForm = () => {
   useEffect(() => {
     const checkUserPersistance = async () => {
       try {
-        userAuth = await AsyncStorage.getItem("userAuth");
-        global.userAuth = JSON.parse(userAuth);
-
         if (global.userAuth != null) {
           // es necesario trael los datos del usuario cada vez que se inicia la aplicacion (por los perros que tiene almacenado)
-          const userData = await getUser(global.userAuth.uid);
-          if (userData == null) {
+          if (global.userData == null) {
             await AsyncStorage.removeItem("userAuth");
             global.userAuth = null;
             await signOut(auth);
           } else {
             await AsyncStorage.setItem("userData", JSON.stringify(userData));
-            global.userData = userData;
-            global.dogList = await getDogsUnviewed(userData.dogsSelected);
             navigation.navigate("Principal");
           }
         }
