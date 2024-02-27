@@ -75,11 +75,12 @@ const DogForm = ({ navigation }) => {
         setImage(manipResult.uri);
         setUploading(true);
         let nameTemp = null;
+        //la comparacion es por que no puedo acceder al estado directamente en el mismo metodo cuando lo cambio
+
         if (nameImageFirestore == "") {
           nameTemp = global.userAuth.uid + `_` + new Date();
           setNameImageFirestore(nameTemp);
         }
-        //la comparacion es por que no puedo acceder al estado directamente en el mismo metodo cuando lo cambio
         const downloadUrl = await uploadToFirebase(
           manipResult.uri,
           `dogsImages/` +
@@ -87,6 +88,7 @@ const DogForm = ({ navigation }) => {
         );
         setUrlImage(downloadUrl);
         getBlurHash(downloadUrl).then((response) => {
+          console.log(response.blurHash);
           setBlurHash(response.blurHash);
         });
         const breeds = await getBreed(downloadUrl);

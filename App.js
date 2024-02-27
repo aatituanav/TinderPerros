@@ -14,19 +14,21 @@ import { getDogsUnviewed } from "./src/api/crudDogs";
 AppRegistry.registerComponent(expo.name, () => App);
 
 SplashScreen.preventAutoHideAsync();
-
+global.dev = true;
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   useEffect(() => {
     async function prepare() {
       try {
         // Pre-load fonts, make any API calls you need to do here
-        global.breeds = breeds;
-        userAuth = await AsyncStorage.getItem("userAuth");
-        global.userAuth = JSON.parse(userAuth);
-        if (global.userAuth) {
-          global.userData = await getUser(global.userAuth.uid);
-          global.dogList = await getDogsUnviewed(userData.dogsSelected);
+        if (global.dev) {
+          global.breeds = breeds;
+          userAuth = await AsyncStorage.getItem("userAuth");
+          global.userAuth = JSON.parse(userAuth);
+          if (global.userAuth) {
+            global.userData = await getUser(global.userAuth.uid);
+            global.dogList = await getDogsUnviewed(userData.dogsSelected);
+          }
         }
       } catch (e) {
         console.warn(e);
@@ -62,4 +64,3 @@ export default function App() {
     </PaperProvider>
   );
 }
-//

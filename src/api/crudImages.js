@@ -40,7 +40,8 @@ const uploadToFirebase = async (imageUri, name, onProgress) => {
 };
 
 export async function getBlurHash(imageUrl) {
-  const localUrl = "http://192.168.1.65:8080/api/getblurhash";
+  const url = `${APIDOGBREED}getblurhash`;
+  console.log(url);
   const data = {
     image_url: imageUrl,
   };
@@ -54,7 +55,7 @@ export async function getBlurHash(imageUrl) {
   };
 
   try {
-    const response = await fetch(localUrl, options);
+    const response = await fetch(url, options);
     if (!response.ok) {
       throw new Error(
         "Error al obtener los datos. Código de estado: " + response.status

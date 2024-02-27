@@ -1,8 +1,9 @@
 import { APIDOGBREED } from "@env";
 
 export async function getBreed(imageUrl) {
-  const url = APIDOGBREED;
-  const localUrl = "http://192.168.1.65:8080/api/predictbreed";
+  
+  const url = `${APIDOGBREED}predictbreed`;
+
   const data = {
     image_url: imageUrl,
   };
@@ -16,7 +17,7 @@ export async function getBreed(imageUrl) {
   };
 
   try {
-    const response = await fetch(localUrl, options);
+    const response = await fetch(url, options);
     if (!response.ok) {
       throw new Error(
         "Error al obtener los datos. Código de estado: " + response.status

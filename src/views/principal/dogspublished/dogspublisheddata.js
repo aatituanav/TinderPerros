@@ -20,15 +20,7 @@ const DogsPublishedData = ({ navigation }) => {
 
   useEffect(() => {
     console.log("se renderiza DogsPublishedData");
-    const traerPerrosPublicados = async (userUid) => {
-      const temp = await getDogsPublishedByUserUID(userUid);
-      if (temp) {
-        setDogsList(Object.values(temp));
-      } else {
-        setDogsList([]);
-      }
-    };
-    traerPerrosPublicados(global.userAuth.uid);
+    getDogsPublishedByUserUID(global.userAuth.uid, setDogsList);
   }, []);
 
   const openMenu = () => setShowMenu(true);

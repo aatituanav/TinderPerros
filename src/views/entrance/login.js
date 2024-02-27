@@ -62,13 +62,13 @@ const Login = ({ goBack }) => {
         await AsyncStorage.setItem("userAuth", JSON.stringify(userJsonAuth));
         global.userAuth = userJsonAuth;
         const userData = await getUser(global.userAuth.uid);
-        resetData();
         if (userData) {
           //traigo los perros cada vez que inicio sesión y almaceno los datos
           //persisto los datos que faltan y continúo
           await AsyncStorage.setItem("userData", JSON.stringify(userData));
           global.dogList = await getDogsUnviewed(userData.dogsSelected);
           global.userData = userData;
+          resetData();
           navigation.navigate("Principal");
         } else {
           navigation.navigate("UserFormRegister");

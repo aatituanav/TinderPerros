@@ -3,6 +3,7 @@ import {
   equalTo,
   get,
   limitToLast,
+  onValue,
   orderByChild,
   orderByValue,
   push,
@@ -101,19 +102,13 @@ const selectDog = async (user, petUid, operation) => {
   });
 };
 
-const getDogsPublishedByUserUID = async (userUid) => {
+const getDogsPublishedByUserUID = async (userUid, updateFunction) => {
   //obtiene todos los perros que un usuario ha publicado en la red
   const refToData = ref(database, "dogsData");
   const selectQuery = query(refToData, orderByChild("user"), equalTo(userUid));
-  return new Promise((resolve, reject) => {
-    get(selectQuery)
-      .then((snapshot) => {
-        resolve(snapshot.val());
-      })
-      .catch((error) => {
-        console.log(`error en getDogsPublishedByUserUID: ${error}`);
-        reject(null);
-      });
+  onValue(selectQuery, (snapshot) => {
+    const data = snapshot.val();
+    updateFunction(data ? Object.values(data) : []);
   });
 };
 
