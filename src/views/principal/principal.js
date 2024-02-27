@@ -11,11 +11,13 @@ import Emparejamiento from "./emparejamiento";
 import { useEffect } from "react";
 import DogsPublishedMain from "./dogspublished/dogspublishedmain";
 import { useNavigationState } from "@react-navigation/native";
+import { useTheme } from "../../styles/ThemeContext";
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function Principal() {
   const navigationState = useNavigationState((state) => state);
+  const { isDarkTheme } = useTheme();
 
   useEffect(() => {
     const backAction = () => {
@@ -45,7 +47,7 @@ export default function Principal() {
             <MaterialIcons
               name="pets"
               size={30}
-              color="#000"
+              color={isDarkTheme ? "#FFF" : "#3eb7b3"}
               style={{ marginRight: 0 }}
             />
           ),
@@ -60,7 +62,7 @@ export default function Principal() {
             <FontAwesome6
               name="dog"
               size={30}
-              color="#000"
+              color={isDarkTheme ? "#FFF" : "#3eb7b3"}
               style={{ marginRight: 0 }}
             />
           ),
@@ -75,7 +77,7 @@ export default function Principal() {
             <MaterialCommunityIcons
               name="dog"
               size={30}
-              color="#000"
+              color={isDarkTheme ? "#FFF" : "#3eb7b3"}
               style={{ marginRight: 0 }}
             />
           ),
@@ -90,7 +92,7 @@ export default function Principal() {
             <FontAwesome6
               name="gear"
               size={30}
-              color="#000"
+              color={isDarkTheme ? "#FFF" : "#3eb7b3"}
               style={{ marginRight: 0 }}
             />
           ),
@@ -99,4 +101,3 @@ export default function Principal() {
     </Tab.Navigator>
   );
 }
-

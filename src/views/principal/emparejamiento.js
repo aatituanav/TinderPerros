@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { selectDog } from "../../api/crudDogs";
 import { DISMISS_DOG, SELECT_DOG } from "../../constants/constants";
-import { ActivityIndicator } from "react-native-paper";
+import { ActivityIndicator, Text } from "react-native-paper";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import styles from "../../styles/styles";
 import { Image } from "expo-image";
@@ -60,13 +60,13 @@ const Emparejamiento = () => {
           </View>
           <View style={styles.e_buttonContainer}>
             <TouchableOpacity
-              style={[styles.e_button, { backgroundColor: "#FF9E9E" }]}
+              style={[styles.e_button, { backgroundColor: "#efa350" }]}
               onPress={() => selectPet(DISMISS_DOG)}
             >
               <Text style={styles.e_buttonText}>Siguiente</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.e_button, { backgroundColor: "#ABFF9E" }]}
+              style={[styles.e_button, { backgroundColor: "#3eb7b3" }]}
               onPress={() => selectPet(SELECT_DOG)}
             >
               <Text style={styles.e_buttonText}>Adoptar</Text>

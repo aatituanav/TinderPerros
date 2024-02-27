@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
 
 const dimensions = Dimensions.get("window");
-const imageWidth = dimensions.width * 0.7;
+const imageWidth = dimensions.width;
 
 const styles = StyleSheet.create({
   container: {
@@ -26,11 +26,17 @@ const styles = StyleSheet.create({
   breedDialogListContainer: {
     flexDirection: "column",
   },
+
   breedDialogListButton: {
     width: "100%",
     marginVertical: 5,
   },
   image: { width: 300, height: 300, marginVertical: 10 },
+
+  af_imageLogo: {
+    width: imageWidth * 0.6,
+    height: imageWidth * 0.6,
+  },
 
   dp_imageinList: {
     width: 100,
@@ -38,7 +44,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     margin: 10,
     borderWidth: 3,
-    borderColor: "gray", // Color del borde rojo
+    borderColor: "#3eb7b3",
   },
 
   dp_datatext_container: {
@@ -61,8 +67,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   e_petImage: {
-    height: imageWidth,
-    width: imageWidth,
+    height: imageWidth * 0.7,
+    width: imageWidth * 0.7,
     borderRadius: 10,
     marginBottom: 10,
   },
@@ -73,7 +79,6 @@ const styles = StyleSheet.create({
   },
   e_petDetails: {
     fontSize: 16,
-    color: "#666",
   },
   e_buttonContainer: {
     flexDirection: "row",
@@ -88,11 +93,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   e_buttonText: {
-    color: "#fff",
+    color: "#000",
     fontSize: 16,
+    fontWeight: "bold",
   },
   ufr_dropdown: {
-    backgroundColor: "orange",
     width: 100,
   },
 });

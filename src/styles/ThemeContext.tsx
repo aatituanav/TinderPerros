@@ -24,6 +24,9 @@ const lightTheme: Theme = {
   colors: {
     ...NavigationDefaultTheme.colors,
     ...PaperDefaultTheme.colors,
+    primary: '#3eb7b3',
+    onPrimary: '#fff',
+    secondaryContainer: '#c9c9c9'
   },
 };
 
@@ -33,6 +36,9 @@ const darkTheme: Theme = {
   colors: {
     ...NavigationDarkTheme.colors,
     ...PaperDarkTheme.colors,
+    primary: '#3eb7b3',
+    onPrimary: '#000',
+    secondaryContainer: '#215f5d'
   },
 };
 

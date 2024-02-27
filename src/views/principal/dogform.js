@@ -17,6 +17,7 @@ import { database } from "../../../firebase";
 import { TextInput, Text, Button, ActivityIndicator } from "react-native-paper";
 import { manipulateAsync } from "expo-image-manipulator";
 import { putDog } from "../../api/crudDogs";
+import { useTheme } from "../../styles/ThemeContext";
 
 const DogForm = ({ navigation }) => {
   const [image, setImage] = useState(null);
@@ -40,6 +41,7 @@ const DogForm = ({ navigation }) => {
   const hideDialog = () => setDialogVisible(false);
   const hideWriteDialog = () => setDialogWriteVisible(false);
   const showWriteDialog = () => setDialogWriteVisible(true);
+  const { isDarkTheme } = useTheme();
 
   const resetData = () => {
     setImage(null);
@@ -123,7 +125,8 @@ const DogForm = ({ navigation }) => {
         hideDialog,
         showWriteDialog,
         setBreedId,
-        setBreedName
+        setBreedName,
+        isDarkTheme
       );
   }, [dialogVisible, breedsList, punctuationList]);
 

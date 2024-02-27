@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Image, View, StyleSheet, Alert, BackHandler } from "react-native";
+import { Image, View, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Login from "./login";
 import Signup from "./signup";
-import { Button, Text } from "react-native-paper";
+import { Button } from "react-native-paper";
 import styles from "../../styles/styles";
 
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../../../firebase";
 import { signOut } from "firebase/auth";
-import { getDogsUnviewed } from "../../api/crudDogs";
-import { getUser } from "../../api/crudusers";
+import { Dimensions } from "react-native";
 
 const MAIN = 0;
 const LOGIN = 1;
@@ -19,6 +18,9 @@ const SIGNUP = 2;
 const AuthForm = () => {
   const [mainState, setMainState] = useState(0);
   const navigation = useNavigation();
+
+  const win = Dimensions.get("window");
+  const ratio = win.width / 541; //541 is actual image width
 
   useEffect(() => {
     const checkUserPersistance = async () => {
@@ -60,7 +62,12 @@ const AuthForm = () => {
           flex: 3,
         }}
       >
-        <Image source={require("../../assets/petmachlogo.png")} />
+        <>
+          <Image
+            source={require("../../assets/petmachlogo.png")}
+            style={styles.af_imageLogo}
+          />
+        </>
       </View>
       {mainState === MAIN && (
         <>
@@ -87,14 +94,6 @@ const AuthForm = () => {
                 justifyContent: "center",
               }}
             >
-              <Button
-                icon={({ size, color }) => (
-                  <Image
-                    source={require("../../assets/googleicon.png")}
-                    style={styles.icons}
-                  />
-                )}
-              ></Button>
               <Button
                 onPress={() => {
                   handleButtonPress(1);

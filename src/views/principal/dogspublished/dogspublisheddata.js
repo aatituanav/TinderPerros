@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { View, Text, FlatList } from "react-native";
+import { View, FlatList } from "react-native";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import { Image } from "expo-image";
 import { getDogsPublishedByUserUID } from "../../../api/crudDogs";
@@ -9,6 +9,7 @@ import {
   Divider,
   Menu,
   TouchableRipple,
+  Text,
 } from "react-native-paper";
 
 const DogsPublishedData = ({ navigation }) => {

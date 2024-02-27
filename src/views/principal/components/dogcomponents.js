@@ -56,7 +56,8 @@ const BreedSelector = (
   hideDialog,
   showWriteDialog,
   setBreedId,
-  setBreedName
+  setBreedName,
+  isDarkTheme
 ) => {
   return (
     <Portal>
@@ -69,6 +70,7 @@ const BreedSelector = (
         </Dialog.Content>
         <Dialog.Actions style={styles.breedDialogListContainer}>
           {punctuationList.map((element, index) => {
+            console.log('index')
             return (
               <View style={styles.breedDialogListButton} key={index}>
                 <Button
@@ -81,7 +83,10 @@ const BreedSelector = (
                 >
                   {global.breeds[breedsList[index]]}
                 </Button>
-                <ProgressBar progress={element} color={MD3Colors.error50} />
+                <ProgressBar
+                  progress={element}
+                  color={isDarkTheme ? "#3eb7b3" : "#efa350"}
+                />
               </View>
             );
           })}
