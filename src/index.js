@@ -22,25 +22,23 @@ export default function Index() {
         paddingRight: insets.right,
       }}
     >
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="AuthForm"
-            options={{ headerShown: false }} // Oculta el encabezado en esta pantalla
-            component={AuthForm}
-          />
-          <Stack.Screen
-            name="Principal"
-            options={{ headerShown: false }} // Oculta el encabezado en esta pantalla
-            component={Principal}
-          />
-          <Stack.Screen
-            name="UserFormRegister"
-            options={{ headerShown: false }} // Oculta el encabezado en esta pantalla
-            component={UserFormRegister}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="AuthForm"
+          options={{ headerShown: false }} // Oculta el encabezado en esta pantalla
+          component={AuthForm}
+        />
+        <Stack.Screen
+          name="Principal"
+          options={{ headerShown: false }} // Oculta el encabezado en esta pantalla
+          component={Principal}
+        />
+        <Stack.Screen
+          name="UserFormRegister"
+          options={{ headerShown: false }} // Oculta el encabezado en esta pantalla
+          component={UserFormRegister}
+        />
+      </Stack.Navigator>
     </View>
   );
 }

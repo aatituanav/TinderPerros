@@ -14,7 +14,6 @@ import styles from "../../../styles/styles";
 import { getUser } from "../../../api/crudusers";
 import { Image } from "expo-image";
 
-const blurhash = "USI;6Tw^~p9uWXS$ogozFxE1-oRPxZRkNGoM";
 
 export default function AdoptionAplicantsList({ navigation, route }) {
   const [usersApplingList, setUsersApplingList] = useState(null);

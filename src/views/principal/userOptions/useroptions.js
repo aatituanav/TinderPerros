@@ -6,8 +6,11 @@ import { getAuth, signOut } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import styles from "../../../styles/styles";
 import { auth } from "../../../../firebase";
+import { useTheme } from "../../../styles/ThemeContext";
 
 const UserOptions = ({ navigation }) => {
+  const { toggleThemeType, themeType, isDarkTheme, theme } = useTheme();
+
   const handleLogOut = async () => {
     try {
       await AsyncStorage.removeItem("userAuth");
@@ -21,10 +24,9 @@ const UserOptions = ({ navigation }) => {
       Alert.alert(error.message);
     }
   };
-  const editData =  () => {
-navigation.navigate("UserOptionMain")
-
-  }
+  const editData = () => {
+    navigation.navigate("UserOptionMain");
+  };
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -32,9 +34,27 @@ navigation.navigate("UserOptionMain")
         style={styles.buttons}
         icon="dog"
         mode="contained"
-        onPress={handleLogOut}
+        onPress={() => {
+          navigation.navigate("DogForm");
+        }}
       >
         Registrar Mascota
+      </Button>
+      <Button
+        style={styles.buttons}
+        icon="lead-pencil"
+        mode="contained"
+        onPress={editData}
+      >
+        Editar datos de usuario
+      </Button>
+      <Button
+        style={styles.buttons}
+        icon={isDarkTheme ? "white-balance-sunny" : "moon-waning-crescent"}
+        mode="contained"
+        onPress={toggleThemeType}
+      >
+        {isDarkTheme ? "Modo Claro" : "Modo oscuro"}
       </Button>
       <Button
         style={styles.buttons}
@@ -43,14 +63,6 @@ navigation.navigate("UserOptionMain")
         onPress={handleLogOut}
       >
         Cerrar Sesion
-      </Button>
-      <Button
-        style={styles.buttons}
-        icon="logout"
-        mode="contained"
-        onPress={editData}
-      >
-        Editar datos de usuario
       </Button>
     </View>
   );

@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUser } from "./src/api/crudusers";
 import { getDogsUnviewed } from "./src/api/crudDogs";
+import { ThemeContextProvider, useTheme } from "./src/styles/ThemeContext";
 
 AppRegistry.registerComponent(expo.name, () => App);
 
@@ -17,6 +18,8 @@ SplashScreen.preventAutoHideAsync();
 global.dev = true;
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+
+  const { toggleThemeType, themeType, isDarkTheme } = useTheme();
   useEffect(() => {
     async function prepare() {
       try {
@@ -57,10 +60,10 @@ export default function App() {
   }
 
   return (
-    <PaperProvider>
+    <ThemeContextProvider>
       <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
         <Index />
       </View>
-    </PaperProvider>
+    </ThemeContextProvider>
   );
 }
