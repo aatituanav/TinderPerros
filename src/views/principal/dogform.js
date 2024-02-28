@@ -7,6 +7,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { getBlurHash, uploadToFirebase } from "../../api/crudImages";
@@ -165,75 +166,83 @@ const DogForm = ({ navigation }) => {
       behavior="padding"
       keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 50}
     >
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Button
-          style={styles.buttons}
-          icon="image"
-          mode="contained"
-          disabled={uploading || uploadingForm}
-          onPress={() => {
-            setCanUpload(false);
-            pickImage();
-            //console.log(name);
+      <ScrollView>
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            marginVertical: 100,
           }}
         >
-          Cargar Imagen
-        </Button>
-        {image && (
-          <>
-            <Image source={{ uri: image }} style={styles.image} />
-          </>
-        )}
-        {image && !uploading && (
-          <>
-            <Text variant="titleLarge">Raza: </Text>
-            <Text variant="titleLarge">
-              {breedId == "" ? breedName : global.breeds[breedId]}
-            </Text>
-          </>
-        )}
-        {uploading && (
-          <View>
-            <Text variant="titleLarge">Analizando Imagen</Text>
-            <ActivityIndicator size="large" animating={true} />
-          </View>
-        )}
-        <TextInput
-          style={styles.buttons}
-          label="Nombre"
-          value={name}
-          onChangeText={setName}
-        />
-        <TextInput
-          style={styles.buttons}
-          label="Año de nacimiento"
-          value={birthdate}
-          onChangeText={setBirthdate}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={styles.buttons}
-          multiline
-          placeholder="Cuentanos sobre tu mascota"
-          value={description}
-          onChangeText={setDescription}
-        />
+          <Button
+            style={styles.buttons}
+            icon="image"
+            mode="contained"
+            disabled={uploading || uploadingForm}
+            onPress={() => {
+              setCanUpload(false);
+              pickImage();
+              //console.log(name);
+            }}
+          >
+            Cargar Imagen
+          </Button>
+          {image && (
+            <>
+              <Image source={{ uri: image }} style={styles.image} />
+            </>
+          )}
+          {image && !uploading && (
+            <>
+              <Text variant="titleLarge">Raza: </Text>
+              <Text variant="titleLarge">
+                {breedId == "" ? breedName : global.breeds[breedId]}
+              </Text>
+            </>
+          )}
+          {uploading && (
+            <View>
+              <Text variant="titleLarge">Analizando Imagen</Text>
+              <ActivityIndicator size="large" animating={true} />
+            </View>
+          )}
+          <TextInput
+            style={styles.buttons}
+            label="Nombre"
+            value={name}
+            onChangeText={setName}
+          />
+          <TextInput
+            style={styles.buttons}
+            label="Año de nacimiento"
+            value={birthdate}
+            onChangeText={setBirthdate}
+            keyboardType="numeric"
+          />
+          <TextInput
+            style={styles.buttons}
+            multiline
+            placeholder="Cuentanos sobre tu mascota"
+            value={description}
+            onChangeText={setDescription}
+          />
 
-        <Button
-          style={styles.buttons}
-          icon="publish"
-          mode="contained"
-          loading={uploadingForm}
-          disabled={!canUpload || uploadingForm || blurHash == null}
-          onPress={() => {
-            handlePetUpload();
-          }}
-        >
-          Publicar
-        </Button>
-        {BreedSelectorMemo()}
-        {WriteBreedMemo()}
-      </View>
+          <Button
+            style={styles.buttons}
+            icon="publish"
+            mode="contained"
+            loading={uploadingForm}
+            disabled={!canUpload || uploadingForm || blurHash == null}
+            onPress={() => {
+              handlePetUpload();
+            }}
+          >
+            Publicar
+          </Button>
+          {BreedSelectorMemo()}
+          {WriteBreedMemo()}
+        </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
