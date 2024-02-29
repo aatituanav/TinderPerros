@@ -96,6 +96,8 @@ const UserFormRegister = ({ navigation }) => {
           idnumber: idnumber,
           blurHash: blurHash,
         };
+        global.dogList = await getDogsUnviewed(userData.dogsSelected);
+
         global.dogList = await getDogsUnviewed(null);
         await AsyncStorage.setItem("userData", JSON.stringify(global.userData));
         setUploadingForm(false);

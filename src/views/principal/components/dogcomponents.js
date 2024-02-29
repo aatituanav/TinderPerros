@@ -70,7 +70,6 @@ const BreedSelector = (
         </Dialog.Content>
         <Dialog.Actions style={styles.breedDialogListContainer}>
           {punctuationList.map((element, index) => {
-            console.log('index')
             return (
               <View style={styles.breedDialogListButton} key={index}>
                 <Button

@@ -13,13 +13,14 @@ import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import styles from "../../../styles/styles";
 import { getUser } from "../../../api/crudusers";
 import { Image } from "expo-image";
-
+import { useTheme } from "../../../styles/ThemeContext";
 
 export default function AdoptionAplicantsList({ navigation, route }) {
   const [usersApplingList, setUsersApplingList] = useState(null);
   const [userSelectedData, setUserSelectedData] = useState(null);
   const [showUser, setShowUser] = useState(false);
   const [dogName, setDogName] = useState(false);
+  const { isDarkTheme } = useTheme();
 
   useEffect(() => {
     console.log("se renderiza AdoptionAplicantsList");
@@ -56,7 +57,7 @@ export default function AdoptionAplicantsList({ navigation, route }) {
     return (
       <View style={{ paddingVertical: 10 }}>
         <Text variant="titleSmall">Personas que quieren a {dogName}</Text>
-        <Divider bold/>
+        <Divider bold />
       </View>
     );
   };
@@ -81,22 +82,22 @@ export default function AdoptionAplicantsList({ navigation, route }) {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       {usersApplingList == null ? (
         <>
           <Text variant="titleLarge">Cargando Datos...</Text>
           <ActivityIndicator size="large" animating={true} />
         </>
       ) : usersApplingList.length === 0 ? (
-        <>
-          <Text>No has publicado ninguna mascota</Text>
+        <View style={styles.container}>
+          <Text>Todavía no hay adoptantes.</Text>
           <FontAwesome6
             name="face-sad-tear"
             size={100}
-            color="#000"
+            color={isDarkTheme ? "white" : "#3eb7b3"}
             style={{ marginRight: 0 }}
           />
-        </>
+        </View>
       ) : (
         <>
           <FlatList

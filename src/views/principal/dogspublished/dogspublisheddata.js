@@ -11,6 +11,7 @@ import {
   TouchableRipple,
   Text,
 } from "react-native-paper";
+import { useTheme } from "../../../styles/ThemeContext";
 
 const DogsPublishedData = ({ navigation }) => {
   const [showMenu, setShowMenu] = useState(false);
@@ -18,6 +19,7 @@ const DogsPublishedData = ({ navigation }) => {
   const [dogSelected, setDogSelected] = useState("");
   const [dogsList, setDogsList] = useState(null);
   const [dogsName, setDogsName] = useState(null);
+  const { isDarkTheme } = useTheme();
 
   useEffect(() => {
     console.log("se renderiza DogsPublishedData");
@@ -88,7 +90,7 @@ const DogsPublishedData = ({ navigation }) => {
           <FontAwesome6
             name="face-sad-tear"
             size={100}
-            color="#000"
+            color={isDarkTheme ? "white" : "#3eb7b3"}
             style={{ marginRight: 0 }}
           />
         </View>

@@ -52,7 +52,7 @@ const Emparejamiento = () => {
               style={styles.e_petImage}
               source={petList[0].urlImage}
               placeholder={petList[0].blurHash}
-              transition={400}
+              transition={200}
             />
             <Text style={styles.e_petName}>{petList[0].name}</Text>
             <Text style={styles.e_petDetails}>{petList[0].breedName}</Text>

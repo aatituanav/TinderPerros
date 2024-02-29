@@ -132,8 +132,9 @@ const DogForm = ({ navigation }) => {
   }, [dialogVisible, breedsList, punctuationList]);
 
   const handlePetUpload = () => {
+    setUploadingForm(true);
+
     const writeData = async () => {
-      setUploadingForm(true);
       try {
         putDog(
           global.userAuth.uid,
@@ -156,7 +157,6 @@ const DogForm = ({ navigation }) => {
         Alert.alert(error.message);
       }
     };
-
     writeData();
   };
 
